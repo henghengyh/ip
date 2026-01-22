@@ -1,13 +1,32 @@
+import java.util.*;
+
 public class Agnes {
     public static void main(String[] args) {
-        String hiMessage = "Hello! I'm " + Agnes.class.getName() + "\nWhat can I do for you?";
-        String line = "---------------------------------";
-        String byeMessage = "Bye. Hope to see you again soon!";
+        Agnes myBot = new Agnes();
+        myBot.run();
+    }
 
-        System.out.println(line);
-        System.out.println(hiMessage);
-        System.out.println(line);
-        System.out.println(byeMessage);
-        System.out.println(line);
+    private void run() {
+        startConversation();
+        endConversation();
+    }
+
+    private void startConversation() {
+        printDottedLine();
+        System.out.println("\tHello! I'm " + Agnes.class.getName() + "\n\tWhat can I do for you?");
+        printDottedLine();
+    }
+
+    private void endConversation() {
+        System.out.println("\tGoodbye! Have a wonderful day ahead!");
+        printDottedLine();
+    }
+
+    private void printDottedLine() {
+        System.out.println("\t------------------------------------");
+    }
+
+    private void print(Object obj) {
+        System.out.println("\t" + obj);
     }
 }
