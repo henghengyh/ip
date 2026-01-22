@@ -42,6 +42,8 @@ public class Agnes {
                     handleMark(request, true);
                 } else if (request.split(" ")[0].equals("unmark")) {
                     handleMark(request, false);
+                } else if (request.split(" ")[0].equals("delete")) {
+                    handleDelete(request);
                 } else {
                     handleCommands(request);
                 }
@@ -101,10 +103,14 @@ public class Agnes {
         if (parts.length < 2) {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
         }
+        int taskNo = checkTaskNumber(parts[1]);
+        markTask(tasks.get(taskNo - 1), mark);
+    }
 
+    private int checkTaskNumber(String number) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         int taskNo;
         try {
-            taskNo = Integer.parseInt(parts[1]);
+            taskNo = Integer.parseInt(number);
         } catch (NumberFormatException e) {
             throw new InvalidTaskNumberException("Can count 123 or not... Give me a proper number!");
         }
@@ -112,8 +118,17 @@ public class Agnes {
         if (taskNo < 1 || taskNo > tasks.size()) {
             throw new TaskIndexOutOfBoundsException("Your task number is out of my range! Try the command 'list' to know how many task you have :))");
         }
+        return taskNo;
+    }
 
-        markTask(tasks.get(taskNo - 1), mark);
+    private void handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+        String[] parts = request.split(" ");
+        if (parts.length < 2) {
+            throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
+        }
+
+        int taskNo = checkTaskNumber(parts[1]);
+        deleteTask(taskNo);
     }
 
     // ACTIONS TO CALL TO A TASK
@@ -138,6 +153,16 @@ public class Agnes {
         printDottedLine();
         print("New task received. I've added this task.");
         print("\t" + t);
+        print(String.format("Now you have %d tasks in the list.", tasks.size()));
+        printDottedLine();
+    }
+
+    private void deleteTask(int x) {
+        Task toBeRemoved = this.tasks.get(x - 1);
+        printDottedLine();
+        print("Noted. I've removed this task:");
+        print("\t" + toBeRemoved);
+        tasks.remove(x - 1);
         print(String.format("Now you have %d tasks in the list.", tasks.size()));
         printDottedLine();
     }
