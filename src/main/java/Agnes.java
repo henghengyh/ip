@@ -42,8 +42,14 @@ public class Agnes {
                 int taskNo = Integer.parseInt(request.split(" ")[1]);
                 markTask(tasks.get(taskNo - 1), false);
             } else {
-                tasks.add(new Task(request));
-                printReply("added: " + request);
+                String action = request.split(" ")[0];
+                if (action.equals("deadline")) {
+                    String content = request.substring(9);
+                    String[] deadlineInfo = content.split(" /by ");
+                    Task t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
+                    addTask(t);
+                }
+
             }
         }
         sc.close();
@@ -85,5 +91,12 @@ public class Agnes {
         printDottedLine();
         print(objs);
         printDottedLine();
+    }
+
+    private void addTask(Task t) {
+        tasks.add(t);
+        print("Got it. I've added this task.");
+        print("\t" + t);
+        print(String.format("Now you have %d tasks in the list.", tasks.size()));
     }
 }
