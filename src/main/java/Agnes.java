@@ -31,21 +31,29 @@ public class Agnes {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String request = sc.nextLine();
+            String keyword = request.split(" ")[0];
+            Command command = Command.from(keyword);
             try {
-                if (request.equals("hi")) {
-                    printReply("Helloss! What can I do for you?");
-                } else if (request.equals("bye")) {
-                    break;
-                } else if (request.equals("list")) {
-                    listItems();
-                } else if (request.split(" ")[0].equals("mark")) {
-                    handleMark(request, true);
-                } else if (request.split(" ")[0].equals("unmark")) {
-                    handleMark(request, false);
-                } else if (request.split(" ")[0].equals("delete")) {
-                    handleDelete(request);
-                } else {
-                    handleCommands(request);
+                switch (command) {
+                    case HI:
+                        printReply("Helloss! What can I do for you?");
+                        break;
+                    case BYE:
+                        return;
+                    case LIST:
+                        listItems();
+                        break;
+                    case MARK:
+                        handleMark(request, true);
+                        break;
+                    case UNMARK:
+                        handleMark(request, false);
+                        break;
+                    case DELETE:
+                        handleDelete(request);
+                        break;
+                    default:
+                        handleCommands(request);
                 }
             } catch (InvalidDescriptionException
                      | InvalidTaskNumberException
@@ -54,47 +62,53 @@ public class Agnes {
                 printError(e);
             }
         }
-        sc.close();
     }
 
     // ERROR HANDLING
     private void handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
-        if (action.equals("deadline")) {
-            if (!request.contains(" /by ")) {
-                throw new InvalidDescriptionException(
-                        "Specify your deadline using '/by'..."
-                );
-            }
+        Command cmd = Command.from(action);
+        Task t;
+        String content;
+        switch (cmd) {
+            case TODO:
+                if (request.length() <= 5) {
+                    throw new InvalidDescriptionException(
+                            "Hellos, tell me what description you want!"
+                    );
+                }
 
-            String content = request.substring(9);
-            String[] deadlineInfo = content.split(" /by ");
-            Task t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
-            addTask(t);
-        } else if (action.equals("todo")) {
-            if (request.length() <= 5) {
-                throw new InvalidDescriptionException(
-                        "Hellos, tell me what description you want!"
-                );
-            }
+                content = request.substring(5);
+                t = new ToDo(content);
+                addTask(t);
+                break;
+            case DEADLINE:
+                if (!request.contains(" /by ")) {
+                    throw new InvalidDescriptionException(
+                            "Specify your deadline using '/by'..."
+                    );
+                }
 
-            String content = request.substring(5);
-            Task t = new ToDo(content);
-            addTask(t);
-        } else if (action.equals("event")) {
-            if (!request.contains(" /from ") || !request.contains(" /to ")) {
-                throw new InvalidDescriptionException(
-                        "Specify your event duration using '/from' and '/to'..."
-                );
-            }
+                content = request.substring(9);
+                String[] deadlineInfo = content.split(" /by ");
+                t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
+                addTask(t);
+                break;
+            case EVENT:
+                if (!request.contains(" /from ") || !request.contains(" /to ")) {
+                    throw new InvalidDescriptionException(
+                            "Specify your event duration using '/from' and '/to'..."
+                    );
+                }
 
-            String content = request.substring(6);
-            String[] eventInfo = content.split(" /from ");
-            String[] fromToInfo = eventInfo[1].split(" /to ");
-            Task t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
-            addTask(t);
-        } else {
-            throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
+                content = request.substring(6);
+                String[] eventInfo = content.split(" /from ");
+                String[] fromToInfo = eventInfo[1].split(" /to ");
+                t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
+                addTask(t);
+                break;
+            default:
+                throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
         }
     }
 

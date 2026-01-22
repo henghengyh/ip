@@ -1,6 +1,11 @@
 todo x
 deadline y /by y1
 event z /from z1 /to z2
+deadline y
+deadline y //by 1
+event z
+event
+event z /from z1/to z2
 list
 mark 1
 mark 2
