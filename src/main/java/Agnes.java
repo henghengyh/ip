@@ -17,7 +17,7 @@ public class Agnes {
     // DEFAULT CONVERSATIONS
     private void startConversation() {
         printReply(
-                "Hello! I'm " + Agnes.class.getName(),
+                "Hello thereeee! I'm " + Agnes.class.getName(),
                 "What can I do for you?"
         );
     }
@@ -31,38 +31,89 @@ public class Agnes {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String request = sc.nextLine();
-            if (request.equals("bye")) {
-                break;
-            } else if (request.equals("list")) {
-                listItems();
-            } else if (request.split(" ")[0].equals("mark")) {
-                int taskNo = Integer.parseInt(request.split(" ")[1]);
-                markTask(tasks.get(taskNo - 1), true);
-            } else if (request.split(" ")[0].equals("unmark")) {
-                int taskNo = Integer.parseInt(request.split(" ")[1]);
-                markTask(tasks.get(taskNo - 1), false);
-            } else {
-                String action = request.split(" ")[0];
-                if (action.equals("deadline")) {
-                    String content = request.substring(9);
-                    String[] deadlineInfo = content.split(" /by ");
-                    Task t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
-                    addTask(t);
-                } else if (action.equals("todo")) {
-                    String content = request.substring(5);
-                    Task t = new ToDo(content);
-                    addTask(t);
-                } else if (action.equals("event")) {
-                    String content = request.substring(6);
-                    String[] eventInfo = content.split(" /from ");
-                    String[] fromToInfo = eventInfo[1].split(" /to ");
-                    Task t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
-                    addTask(t);
+            try {
+                if (request.equals("hi")) {
+                    printReply("Helloss! What can I do for you?");
+                } else if (request.equals("bye")) {
+                    break;
+                } else if (request.equals("list")) {
+                    listItems();
+                } else if (request.split(" ")[0].equals("mark")) {
+                    handleMark(request, true);
+                } else if (request.split(" ")[0].equals("unmark")) {
+                    handleMark(request, false);
+                } else {
+                    handleCommands(request);
                 }
-                // Note that currently, the version does not tackle incorrect user inputs
+            } catch (InvalidDescriptionException
+                     | InvalidTaskNumberException
+                     | TaskIndexOutOfBoundsException
+                     | InvalidCommandException e) {
+                printError(e);
             }
         }
         sc.close();
+    }
+
+    // ERROR HANDLING
+    private void handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
+        String action = request.split(" ")[0];
+        if (action.equals("deadline")) {
+            if (!request.contains(" /by ")) {
+                throw new InvalidDescriptionException(
+                        "Specify your deadline using '/by'..."
+                );
+            }
+
+            String content = request.substring(9);
+            String[] deadlineInfo = content.split(" /by ");
+            Task t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
+            addTask(t);
+        } else if (action.equals("todo")) {
+            if (request.length() <= 5) {
+                throw new InvalidDescriptionException(
+                        "Hellos, tell me what description you want!"
+                );
+            }
+
+            String content = request.substring(5);
+            Task t = new ToDo(content);
+            addTask(t);
+        } else if (action.equals("event")) {
+            if (!request.contains(" /from ") || !request.contains(" /to ")) {
+                throw new InvalidDescriptionException(
+                        "Specify your event duration using '/from' and '/to'..."
+                );
+            }
+
+            String content = request.substring(6);
+            String[] eventInfo = content.split(" /from ");
+            String[] fromToInfo = eventInfo[1].split(" /to ");
+            Task t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
+            addTask(t);
+        } else {
+            throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
+        }
+    }
+
+    private void handleMark(String request, boolean mark) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+        String[] parts = request.split(" ");
+        if (parts.length < 2) {
+            throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
+        }
+
+        int taskNo;
+        try {
+            taskNo = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskNumberException("Can count 123 or not... Give me a proper number!");
+        }
+
+        if (taskNo < 1 || taskNo > tasks.size()) {
+            throw new TaskIndexOutOfBoundsException("Your task number is out of my range! Try the command 'list' to know how many task you have :))");
+        }
+
+        markTask(tasks.get(taskNo - 1), mark);
     }
 
     // ACTIONS TO CALL TO A TASK
@@ -81,6 +132,16 @@ public class Agnes {
             );
         }
     }
+
+    private void addTask(Task t) {
+        tasks.add(t);
+        printDottedLine();
+        print("New task received. I've added this task.");
+        print("\t" + t);
+        print(String.format("Now you have %d tasks in the list.", tasks.size()));
+        printDottedLine();
+    }
+
     // ALL PRINT STATEMENTS
     private void listItems() {
         printDottedLine();
@@ -103,12 +164,9 @@ public class Agnes {
         printDottedLine();
     }
 
-    private void addTask(Task t) {
-        tasks.add(t);
+    private void printError(Exception e) {
         printDottedLine();
-        print("New task received. I've added this task.");
-        print("\t" + t);
-        print(String.format("Now you have %d tasks in the list.", tasks.size()));
+        print(e.getMessage());
         printDottedLine();
     }
 }
