@@ -8,6 +8,7 @@ public class Agnes {
 
     private void run() {
         startConversation();
+        userInput();
         endConversation();
     }
 
@@ -20,6 +21,21 @@ public class Agnes {
     private void endConversation() {
         System.out.println("\tGoodbye! Have a wonderful day ahead!");
         printDottedLine();
+    }
+
+    private void userInput() {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            String request = sc.nextLine();
+            if (request.equals("bye")) {
+                printDottedLine();
+                break;
+            }
+            printDottedLine();
+            print(request);
+            printDottedLine();
+        }
+        sc.close();
     }
 
     private void printDottedLine() {
