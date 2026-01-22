@@ -48,8 +48,18 @@ public class Agnes {
                     String[] deadlineInfo = content.split(" /by ");
                     Task t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
                     addTask(t);
+                } else if (action.equals("todo")) {
+                    String content = request.substring(5);
+                    Task t = new ToDo(content);
+                    addTask(t);
+                } else if (action.equals("event")) {
+                    String content = request.substring(6);
+                    String[] eventInfo = content.split(" /from ");
+                    String[] fromToInfo = eventInfo[1].split(" /to ");
+                    Task t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
+                    addTask(t);
                 }
-
+                // Note that currently, the version does not tackle incorrect user inputs
             }
         }
         sc.close();
@@ -95,7 +105,7 @@ public class Agnes {
 
     private void addTask(Task t) {
         tasks.add(t);
-        print("Got it. I've added this task.");
+        print("New task received. I've added this task.");
         print("\t" + t);
         print(String.format("Now you have %d tasks in the list.", tasks.size()));
     }
