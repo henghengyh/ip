@@ -105,8 +105,10 @@ public class Agnes {
 
     private void addTask(Task t) {
         tasks.add(t);
+        printDottedLine();
         print("New task received. I've added this task.");
         print("\t" + t);
         print(String.format("Now you have %d tasks in the list.", tasks.size()));
+        printDottedLine();
     }
 }
