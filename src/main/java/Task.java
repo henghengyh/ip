@@ -26,4 +26,11 @@ public class Task {
     public String toString() {
         return String.format("[%s] %s", this.getStatusIcon(), this.getMessage());
     }
+
+    public String toFileFormat() {
+        return String.format(
+                "%s | %s",
+                complete ? "1" : 0,
+                this.getMessage());
+    }
 }

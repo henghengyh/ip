@@ -6,6 +6,14 @@ public class ToDo extends Task {
 
     @Override
     public String toString() {
-        return String.format("[T][%s] %s", super.getStatusIcon(), super.getMessage());
+        return String.format("[T] %s", super.toString());
+    }
+
+    @Override
+    public String toFileFormat() {
+        return String.format(
+                "T | %s",
+                super.toFileFormat()
+        );
     }
 }
