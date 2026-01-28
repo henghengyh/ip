@@ -1,7 +1,14 @@
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
 
 public class Agnes {
     private List<Task> tasks = new ArrayList<>();
+    private final static String FILE_PATH = "./data/tasks.txt";
 
     public static void main(String[] args) {
         Agnes myBot = new Agnes();
@@ -35,25 +42,25 @@ public class Agnes {
             Command command = Command.from(keyword);
             try {
                 switch (command) {
-                    case HI:
-                        printReply("Helloss! What can I do for you?");
-                        break;
-                    case BYE:
-                        return;
-                    case LIST:
-                        listItems();
-                        break;
-                    case MARK:
-                        handleMark(request, true);
-                        break;
-                    case UNMARK:
-                        handleMark(request, false);
-                        break;
-                    case DELETE:
-                        handleDelete(request);
-                        break;
-                    default:
-                        handleCommands(request);
+                case HI:
+                    printReply("Helloss! What can I do for you?");
+                    break;
+                case BYE:
+                    return;
+                case LIST:
+                    listItems();
+                    break;
+                case MARK:
+                    handleMark(request, true);
+                    break;
+                case UNMARK:
+                    handleMark(request, false);
+                    break;
+                case DELETE:
+                    handleDelete(request);
+                    break;
+                default:
+                    handleCommands(request);
                 }
             } catch (InvalidDescriptionException
                      | InvalidTaskNumberException
@@ -71,44 +78,44 @@ public class Agnes {
         Task t;
         String content;
         switch (cmd) {
-            case TODO:
-                if (request.length() <= 5) {
-                    throw new InvalidDescriptionException(
-                            "Hellos, tell me what description you want!"
-                    );
-                }
+        case TODO:
+            if (request.length() <= 5) {
+                throw new InvalidDescriptionException(
+                        "Hellos, tell me what description you want!"
+                );
+            }
 
-                content = request.substring(5);
-                t = new ToDo(content);
-                addTask(t);
-                break;
-            case DEADLINE:
-                if (!request.contains(" /by ")) {
-                    throw new InvalidDescriptionException(
-                            "Specify your deadline using '/by'..."
-                    );
-                }
+            content = request.substring(5);
+            t = new ToDo(content);
+            addTask(t);
+            break;
+        case DEADLINE:
+            if (!request.contains(" /by ")) {
+                throw new InvalidDescriptionException(
+                        "Specify your deadline using '/by'..."
+                );
+            }
 
-                content = request.substring(9);
-                String[] deadlineInfo = content.split(" /by ");
-                t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
-                addTask(t);
-                break;
-            case EVENT:
-                if (!request.contains(" /from ") || !request.contains(" /to ")) {
-                    throw new InvalidDescriptionException(
-                            "Specify your event duration using '/from' and '/to'..."
-                    );
-                }
+            content = request.substring(9);
+            String[] deadlineInfo = content.split(" /by ");
+            t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
+            addTask(t);
+            break;
+        case EVENT:
+            if (!request.contains(" /from ") || !request.contains(" /to ")) {
+                throw new InvalidDescriptionException(
+                        "Specify your event duration using '/from' and '/to'..."
+                );
+            }
 
-                content = request.substring(6);
-                String[] eventInfo = content.split(" /from ");
-                String[] fromToInfo = eventInfo[1].split(" /to ");
-                t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
-                addTask(t);
-                break;
-            default:
-                throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
+            content = request.substring(6);
+            String[] eventInfo = content.split(" /from ");
+            String[] fromToInfo = eventInfo[1].split(" /to ");
+            t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
+            addTask(t);
+            break;
+        default:
+            throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
         }
     }
 
@@ -169,6 +176,7 @@ public class Agnes {
         print("\t" + t);
         print(String.format("Now you have %d tasks in the list.", tasks.size()));
         printDottedLine();
+        printTasksToFile(Agnes.FILE_PATH);
     }
 
     private void deleteTask(int x) {
@@ -179,6 +187,7 @@ public class Agnes {
         tasks.remove(x - 1);
         print(String.format("Now you have %d tasks in the list.", tasks.size()));
         printDottedLine();
+        printTasksToFile(Agnes.FILE_PATH);
     }
 
     // ALL PRINT STATEMENTS
@@ -208,4 +217,38 @@ public class Agnes {
         print(e.getMessage());
         printDottedLine();
     }
+
+    private static void writeToFile(String filePath, String textToAdd) throws IOException {
+        File file = new File(filePath);
+
+        // Defensive Programming, verify
+        // 1. The parent folder exist
+        // 2. The file to be overwritten in exists
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) parentDir.mkdirs();
+        if (!file.exists()) file.createNewFile();
+
+        // Using overwriting mode; Use (filePath, true) if want to append
+        FileWriter fw = new FileWriter(filePath);
+        fw.write(textToAdd);
+        fw.close();
+    }
+
+    private void printTasksToFile(String filePath) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= tasks.size(); i++) {
+            sb.append(i)
+                    .append(". ")
+                    .append(tasks.get(i - 1))
+                    .append("\n");
+        }
+        try {
+            Agnes.writeToFile(FILE_PATH, sb.toString());
+        } catch (IOException e) {
+            // Since writeToFile conducts defensive programming checks, we
+            // Do not expect any exception thrown by it
+            print(e);
+        }
+    }
+
 }
