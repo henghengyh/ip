@@ -126,6 +126,7 @@ public class Agnes {
         }
         int taskNo = checkTaskNumber(parts[1]);
         markTask(tasks.get(taskNo - 1), mark);
+        printTasksToFile(Agnes.FILE_PATH);
     }
 
     private int checkTaskNumber(String number) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
@@ -150,6 +151,7 @@ public class Agnes {
 
         int taskNo = checkTaskNumber(parts[1]);
         deleteTask(taskNo);
+        printTasksToFile(Agnes.FILE_PATH);
     }
 
     // ACTIONS TO CALL TO A TASK
