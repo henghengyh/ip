@@ -1,4 +1,7 @@
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -98,8 +101,18 @@ public class Agnes {
 
             content = request.substring(9);
             String[] deadlineInfo = content.split(" /by ");
-            t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
-            addTask(t);
+            String datePart = deadlineInfo[1].trim();
+
+            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+            try {
+                LocalDateTime by = DateTimeUtil.parseDateTime(datePart);
+                t = new Deadline(deadlineInfo[0], by);
+                addTask(t);
+            } catch (DateTimeParseException e) {
+                throw new InvalidDescriptionException(
+                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
+                );
+            }
             break;
         case EVENT:
             if (!request.contains(" /from ") || !request.contains(" /to ")) {
