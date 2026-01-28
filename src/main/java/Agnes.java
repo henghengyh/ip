@@ -89,7 +89,7 @@ public class Agnes {
             }
 
             content = request.substring(5);
-            t = new ToDo(content);
+            t = new ToDo(content.trim());
             addTask(t);
             break;
         case DEADLINE:
@@ -106,7 +106,7 @@ public class Agnes {
             DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
             try {
                 LocalDateTime by = DateTimeUtil.parseDateTime(datePart);
-                t = new Deadline(deadlineInfo[0], by);
+                t = new Deadline(deadlineInfo[0].trim(), by);
                 addTask(t);
             } catch (DateTimeParseException e) {
                 throw new InvalidDescriptionException(
@@ -124,8 +124,20 @@ public class Agnes {
             content = request.substring(6);
             String[] eventInfo = content.split(" /from ");
             String[] fromToInfo = eventInfo[1].split(" /to ");
-            t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
-            addTask(t);
+            String fromPart = fromToInfo[0].trim();
+            String toPart = fromToInfo[1].trim();
+
+            try {
+                LocalDateTime from = DateTimeUtil.parseDateTime(fromPart);
+                LocalDateTime to = DateTimeUtil.parseDateTime(toPart);
+
+                t = new Event(eventInfo[0].trim(), from, to);
+                addTask(t);
+            } catch (DateTimeParseException e) {
+                throw new InvalidDescriptionException(
+                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
+                );
+            }
             break;
         default:
             throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
