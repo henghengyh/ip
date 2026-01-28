@@ -10,11 +10,21 @@ public class Event extends Task {
     @Override
     public String toString() {
         return String.format(
-                "[E][%s] %s (from: %s to: %s)",
-                super.getStatusIcon(),
-                super.getMessage(),
+                "[E] %s (from: %s to: %s)",
+                super.toString(),
+                this.from,
+                this.to
+        );
+    }
+
+    @Override
+    public String toFileFormat() {
+        return String.format(
+                "E | %s | from %s to: %s",
+                super.toFileFormat(),
                 this.from,
                 this.to
         );
     }
 }
+
