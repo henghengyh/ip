@@ -57,6 +57,7 @@ public class Parser {
                     break;
                 case FIND:
                     handleFind(request);
+                    break;
                 default:
                     handleCommands(request);
                 }
@@ -190,6 +191,7 @@ public class Parser {
     }
 
     private void handleFind(String request) {
-        // To be implemented
+        String content = request.substring(5);
+        ui.printSearchTasks(tasks.find(content), content);
     }
 }
