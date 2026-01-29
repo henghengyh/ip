@@ -1,4 +1,4 @@
-package ui;
+package agnes.ui;
 
 public class Ui {
     private void printDottedLine() {

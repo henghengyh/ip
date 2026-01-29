@@ -1,4 +1,4 @@
-package task;
+package agnes.task;
 
 public class ToDo extends Task {
 

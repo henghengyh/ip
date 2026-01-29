@@ -1,4 +1,4 @@
-package parser;
+package agnes.parser;
 
 public enum Command {
     HI,

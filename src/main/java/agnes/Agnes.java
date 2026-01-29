@@ -4,15 +4,10 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.File;
 
-import task.TaskList;
-import ui.Ui;
+import agnes.task.TaskList;
+import agnes.ui.Ui;
 
 public class Agnes {
     private TaskList tasks = new TaskList();
@@ -156,7 +151,7 @@ public class Agnes {
     private void handleMark(String request, boolean mark) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
-            throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
+            throw new InvalidTaskNumberException("Don't play play... Give me a agnes.task number!");
         }
         int taskNo = checkTaskNumber(parts[1]);
         markTask(tasks.get(taskNo - 1), mark);
@@ -172,7 +167,7 @@ public class Agnes {
         }
 
         if (taskNo < 1 || taskNo > tasks.size()) {
-            throw new TaskIndexOutOfBoundsException("Your task number is out of my range! Try the command 'list' to know how many task you have :))");
+            throw new TaskIndexOutOfBoundsException("Your agnes.task number is out of my range! Try the command 'list' to know how many agnes.task you have :))");
         }
         return taskNo;
     }
@@ -180,7 +175,7 @@ public class Agnes {
     private void handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
-            throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
+            throw new InvalidTaskNumberException("Don't play play... Give me a agnes.task number!");
         }
 
         int taskNo = checkTaskNumber(parts[1]);
@@ -193,13 +188,13 @@ public class Agnes {
         if (b) {
             task.mark();
             ui.printReply(
-                    "Nice! I've marked this task as done:",
+                    "Nice! I've marked this agnes.task as done:",
                     "\t" + task
             );
         } else {
             task.unmark();
             ui.printReply(
-                    "OK, I've marked this task as not done yet:",
+                    "OK, I've marked this agnes.task as not done yet:",
                     "\t" + task
             );
         }
@@ -208,7 +203,7 @@ public class Agnes {
     private void addTask(Task t) {
         tasks.add(t);
         ui.printDottedLine();
-        ui.print("New task received. I've added this task.");
+        ui.print("New agnes.task received. I've added this agnes.task.");
         ui.print("\t" + t);
         ui.print(String.format("Now you have %d tasks in the list.", tasks.size()));
         ui.printDottedLine();
@@ -218,7 +213,7 @@ public class Agnes {
     private void deleteTask(int x) {
         Task toBeRemoved = this.tasks.get(x - 1);
         ui.printDottedLine();
-        ui.print("Noted. I've removed this task:");
+        ui.print("Noted. I've removed this agnes.task:");
         ui.print("\t" + toBeRemoved);
         tasks.remove(x - 1);
         ui.print(String.format("Now you have %d tasks in the list.", tasks.size()));

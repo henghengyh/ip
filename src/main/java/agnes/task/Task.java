@@ -1,4 +1,4 @@
-package task;
+package agnes.task;
 
 import java.time.LocalDate;
 
@@ -24,7 +24,7 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return (complete ? "X" : " "); // mark done task with X
+        return (complete ? "X" : " "); // mark done agnes.task with X
     }
 
     @Override

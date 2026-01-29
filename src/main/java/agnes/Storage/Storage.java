@@ -1,4 +1,4 @@
-package Storage;
+package agnes.Storage;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,7 +17,7 @@ public class Storage {
         }
 
         // Since writeToFile conducts defensive programming checks, we
-        // Do not expect any exception thrown by it
+        // Do not expect any agnes.exception thrown by it
         writeToFile(sb.toString());
     }
 

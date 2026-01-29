@@ -3,17 +3,17 @@
 	What can I do for you?
 	------------------------------------
 	------------------------------------
-	New task received. I've added this task.
+	New agnes.task received. I've added this agnes.task.
 		[T][ ] x
 	Now you have 1 tasks in the list.
 	------------------------------------
 	------------------------------------
-	New task received. I've added this task.
+	New agnes.task received. I've added this agnes.task.
 		[D][ ] y (by: y1)
 	Now you have 2 tasks in the list.
 	------------------------------------
 	------------------------------------
-	New task received. I've added this task.
+	New agnes.task received. I've added this agnes.task.
 		[E][ ] z (from: z1 to: z2)
 	Now you have 3 tasks in the list.
 	------------------------------------
@@ -38,11 +38,11 @@
 	3. [E][ ] z (from: z1 to: z2)
 	------------------------------------
 	------------------------------------
-	Nice! I've marked this task as done:
+	Nice! I've marked this agnes.task as done:
 		[T][X] x
 	------------------------------------
 	------------------------------------
-	Nice! I've marked this task as done:
+	Nice! I've marked this agnes.task as done:
 		[D][X] y (by: y1)
 	------------------------------------
 	------------------------------------
