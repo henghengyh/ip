@@ -1,3 +1,5 @@
+package agnes.parser;
+
 public enum Command {
     HI,
     BYE,

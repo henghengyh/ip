@@ -1,7 +1,12 @@
 todo x
-deadline y /by y1
-event z /from z1 /to z2
+todo
+deadline y1 /by 2026-01-30
+deadline y2 /by 2026-01-30 0800
+event z1 /from 2026-01-30 0100 /to 2026-01-30 1340
+event z2 /from 2026-02-10 2000 /to 2026-02-11 2359
+event z3 /from 2026-02-11 /to 2026-02-13
 deadline y
+deadline
 deadline y //by 1
 event z
 event
@@ -9,5 +14,8 @@ event z /from z1/to z2
 list
 mark 1
 mark 2
+mark
+mark 10
 list
+on 2026-02-11
 bye

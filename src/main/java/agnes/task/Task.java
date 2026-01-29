@@ -1,20 +1,22 @@
+package agnes.task;
+
 import java.time.LocalDate;
 
 public class Task {
-    private String message;
-    private boolean complete;
+    private final String message;
+    private boolean isComplete;
 
     public Task(String message) {
         this.message = message;
-        this.complete = false;
+        this.isComplete = false;
     }
 
     public void mark() {
-        this.complete = true;
+        this.isComplete = true;
     }
 
     public void unmark() {
-        this.complete = false;
+        this.isComplete = false;
     }
 
     public String getMessage() {
@@ -22,7 +24,7 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return (complete ? "X" : " "); // mark done task with X
+        return (isComplete ? "X" : " "); // mark done agnes.task with X
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Task {
     public String toFileFormat() {
         return String.format(
                 "%s | %s",
-                complete ? "1" : 0,
+                isComplete ? "1" : 0,
                 this.getMessage());
     }
 
