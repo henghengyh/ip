@@ -8,11 +8,13 @@ import java.util.Scanner;
 
 import agnes.task.TaskList;
 import agnes.ui.Ui;
+import agnes.exception.*;
+import agnes.storage.Storage;
 
 public class Agnes {
-    private TaskList tasks = new TaskList();
-    private final static String FILE_PATH = "./data/tasks.txt";
-    private Ui ui = new Ui();
+    private final TaskList tasks = new TaskList();
+    private final Storage storage = new Storage("./data/tasks.txt");
+    private final Ui ui = new Ui();
 
     public static void main(String[] args) {
         Agnes myBot = new Agnes();
@@ -20,21 +22,9 @@ public class Agnes {
     }
 
     private void run() {
-        startConversation();
+        ui.startConversation();
         userInput();
-        endConversation();
-    }
-
-    // DEFAULT CONVERSATIONS
-    private void startConversation() {
-        ui.printReply(
-                "Hello thereeee! I'm " + Agnes.class.getName(),
-                "What can I do for you?"
-        );
-    }
-
-    private void endConversation() {
-        ui.printReply("Goodbye! Have a wonderful day ahead!");
+        ui.endConversation();
     }
 
     // USER INPUT
@@ -155,7 +145,7 @@ public class Agnes {
         }
         int taskNo = checkTaskNumber(parts[1]);
         markTask(tasks.get(taskNo - 1), mark);
-        printTasksToFile(Agnes.FILE_PATH);
+        storage.save(tasks);
     }
 
     private int checkTaskNumber(String number) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
@@ -180,7 +170,7 @@ public class Agnes {
 
         int taskNo = checkTaskNumber(parts[1]);
         deleteTask(taskNo);
-        printTasksToFile(Agnes.FILE_PATH);
+        storage.save(tasks);
     }
 
     // ACTIONS TO CALL TO A TASK
@@ -207,7 +197,7 @@ public class Agnes {
         ui.print("\t" + t);
         ui.print(String.format("Now you have %d tasks in the list.", tasks.size()));
         ui.printDottedLine();
-        ui.printTasksToFile(Agnes.FILE_PATH);
+        storage.save(tasks);
     }
 
     private void deleteTask(int x) {
@@ -218,14 +208,14 @@ public class Agnes {
         tasks.remove(x - 1);
         ui.print(String.format("Now you have %d tasks in the list.", tasks.size()));
         ui.printDottedLine();
-        printTasksToFile(Agnes.FILE_PATH);
+        storage.save(tasks);
     }
 
     // ALL PRINT STATEMENTS
     private void listItems() {
         ui.printDottedLine();
         for (int i = 1; i <= tasks.size(); i++)
-            print(i + ". " + tasks.get(i - 1));
+            ui.print(i + ". " + tasks.get(i - 1));
         ui.printDottedLine();
     }
 
