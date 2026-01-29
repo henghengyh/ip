@@ -18,7 +18,7 @@ public enum Command {
 
     /**
      * Converts a user input string into the corresponding {@code Command}.
-     *
+     * <p>
      * The comparison is case-insensitive. If the input does not match any
      * known command, {@link Command#UNKNOWN} is returned instead of throwing
      * an exception.

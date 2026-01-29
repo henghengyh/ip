@@ -16,17 +16,39 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.List;
 
+/**
+ * Parses user input and executes the corresponding commands.
+ * <p>
+ * The {@code Parser} acts as the command post between the user interface,
+ * task list, and storage system. It interprets raw user input, determines the
+ * intended command, performs the required task operations, and coordinates
+ * saving and displaying results.
+ */
 public class Parser {
     private final TaskList tasks;
     private final Storage storage;
     private final Ui ui;
 
+    /**
+     * Creates a {@code Parser} with the required dependencies.
+     *
+     * @param tasks     The {@code TaskList} storing all the added tasks.
+     * @param storage   The Storage logic to edit files in disk.
+     * @param ui        The user interface logic used for displaying messages.
+     */
     public Parser(TaskList tasks, Storage storage, Ui ui) {
         this.tasks = tasks;
         this.storage = storage;
         this.ui = ui;
     }
 
+    /**
+     * Continuously reads user input from {@code System.in} and processes
+     * commands until the user issues the {@code BYE} command.
+     * <p>
+     * Valid commands trigger task operations, while invalid inputs result
+     * in error messages displayed through the {@code Ui}.
+     */
     public void userInput() {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -67,6 +89,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Handles any {@code Command} given to create a {@code Task}
+     *
+     * @param request   The full user input string.
+     * @throws InvalidDescriptionException  If the task description or format is invalid.
+     * @throws InvalidCommandException      If the command is not recognised.
+     */
     public void handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
         Command cmd = Command.from(action);
@@ -136,12 +165,23 @@ public class Parser {
         }
     }
 
+    /**
+     * Executes the adding of a {@code Task} to the {@code TaskList}.
+     * @param t The {@code Task} to be added.
+     */
     private void addTask(Task t) {
         tasks.addTask(t);
         storage.save(tasks);
         ui.printTaskAdded(t, tasks.size());
     }
 
+    /**
+     * Handles any request to mark a {@code Task}.
+     *
+     * @param request   The full user input string.
+     * @throws InvalidTaskNumberException       If the task number is invalid.
+     * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
+     */
     private void handleMark(String request, boolean mark) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
@@ -153,6 +193,12 @@ public class Parser {
         storage.save(tasks);
     }
 
+    /**
+     * Executes the marking of a {@code Task} and printing of statements.
+     *
+     * @param task  The {@code Task} to be marked.
+     * @param b     {@code true} to mark the task as done, {@code false} to mark as not done.
+     */
     private void markTask(Task task, boolean b) {
         if (b) {
             task.mark();
@@ -164,6 +210,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Handles any request to delete a {@code Task} from a {@code TaskList}
+     *
+     * @param request   The full user input string.
+     * @throws InvalidTaskNumberException       If the task number is invalid.
+     * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
+     */
     public void handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
@@ -175,12 +228,22 @@ public class Parser {
         storage.save(tasks);
     }
 
+    /**
+     * Executes the deleting of a {@code Task} and printing of statements.
+     *
+     * @param taskNo  The task number to delete (1-based index from the user).
+     */
     private void deleteTask(int taskNo) {
         Task removed = tasks.removeTask(taskNo - 1);
         storage.save(tasks);
         ui.printTaskDeleted(removed, tasks.size());
     }
 
+    /**
+     * Handles any request to find all tasks on a specified date.
+     *
+     * @param request   The full user input string containing the date.
+     */
     private void handleOnDate(String request) {
         LocalDate date = DateTimeUtil.parseDateTime(request.substring(3)).toLocalDate();
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
