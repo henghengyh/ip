@@ -14,11 +14,11 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
 
-    public void add(Task t) {
+    public void addTask(Task t) {
         tasks.add(t);
     }
 
-    public Task remove(int index) {
+    public Task removeTask(int index) {
         return tasks.remove(index);
     }
 

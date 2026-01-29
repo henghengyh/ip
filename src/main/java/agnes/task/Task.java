@@ -3,7 +3,7 @@ package agnes.task;
 import java.time.LocalDate;
 
 public class Task {
-    private String message;
+    private final String message;
     private boolean complete;
 
     public Task(String message) {

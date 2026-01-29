@@ -12,15 +12,19 @@ public class Storage {
     public Storage(String filePath) {
         this.filePath = filePath;
     }
-    public void save(TaskList tasks) throws IOException {
+
+    public void save(TaskList tasks) {
         StringBuilder sb = new StringBuilder();
         for (Task t : tasks.getAll()) {
             sb.append(t.toFileFormat()).append("\n");
         }
-
-        // Since writeToFile conducts defensive programming checks, we
-        // Do not expect any agnes.exception thrown by it
-        writeToFile(sb.toString());
+        try {
+            writeToFile(sb.toString());
+        } catch (IOException e) {
+            // Since writeToFile conducts defensive programming checks, we
+            // Do not expect any agnes.exception thrown by it
+            return;
+        }
     }
 
     private void writeToFile(String textToAdd) throws IOException {
