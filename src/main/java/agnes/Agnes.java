@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
+import agnes.task.Task;
 import agnes.task.TaskList;
 import agnes.ui.Ui;
 import agnes.exception.*;
 import agnes.storage.Storage;
+import agnes.util.DateTimeUtil;
 
 public class Agnes {
     private final TaskList tasks = new TaskList();
@@ -27,148 +30,13 @@ public class Agnes {
         ui.endConversation();
     }
 
-    // USER INPUT
-    private void userInput() {
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            String request = sc.nextLine();
-            String keyword = request.split(" ")[0];
-            Command command = Command.from(keyword);
-            try {
-                switch (command) {
-                case Command.HI:
-                    ui.printReply("Helloss! What can I do for you?");
-                    break;
-                case Command.BYE:
-                    return;
-                case Command.LIST:
-                    listItems();
-                    break;
-                case Command.ON:
-                    listItemsOnDate(request);
-                    break;
-                case Command.MARK:
-                    handleMark(request, true);
-                    break;
-                case Command.UNMARK:
-                    handleMark(request, false);
-                    break;
-                case Command.DELETE:
-                    handleDelete(request);
-                    break;
-                default:
-                    handleCommands(request);
-                }
-            } catch (InvalidDescriptionException
-                     | InvalidTaskNumberException
-                     | TaskIndexOutOfBoundsException
-                     | InvalidCommandException e) {
-                ui.printError(e);
-            }
-        }
-    }
-
-    // ERROR HANDLING
-    private void handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
-        String action = request.split(" ")[0];
-        Command cmd = Command.from(action);
-        Task t;
-        String content;
-        switch (cmd) {
-        case Command.TODO:
-            if (request.length() <= 5) {
-                throw new InvalidDescriptionException(
-                        "Hellos, tell me what description you want!"
-                );
-            }
-
-            content = request.substring(5);
-            t = new ToDo(content.trim());
-            addTask(t);
-            break;
-        case Command.DEADLINE:
-            if (!request.contains(" /by ")) {
-                throw new InvalidDescriptionException(
-                        "Specify your deadline using '/by'..."
-                );
-            }
-
-            content = request.substring(9);
-            String[] deadlineInfo = content.split(" /by ");
-            String datePart = deadlineInfo[1].trim();
-
-            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-            try {
-                LocalDateTime by = DateTimeUtil.parseDateTime(datePart);
-                t = new Deadline(deadlineInfo[0].trim(), by);
-                addTask(t);
-            } catch (DateTimeParseException e) {
-                throw new InvalidDescriptionException(
-                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
-                );
-            }
-            break;
-        case Command.EVENT:
-            if (!request.contains(" /from ") || !request.contains(" /to ")) {
-                throw new InvalidDescriptionException(
-                        "Specify your event duration using '/from' and '/to'..."
-                );
-            }
-
-            content = request.substring(6);
-            String[] eventInfo = content.split(" /from ");
-            String[] fromToInfo = eventInfo[1].split(" /to ");
-            String fromPart = fromToInfo[0].trim();
-            String toPart = fromToInfo[1].trim();
-
-            try {
-                LocalDateTime from = DateTimeUtil.parseDateTime(fromPart);
-                LocalDateTime to = DateTimeUtil.parseDateTime(toPart);
-
-                t = new Event(eventInfo[0].trim(), from, to);
-                addTask(t);
-            } catch (DateTimeParseException e) {
-                throw new InvalidDescriptionException(
-                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
-                );
-            }
-            break;
-        default:
-            throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
-        }
-    }
-
-    private void handleMark(String request, boolean mark) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
-        String[] parts = request.split(" ");
-        if (parts.length < 2) {
-            throw new InvalidTaskNumberException("Don't play play... Give me a agnes.task number!");
-        }
-        int taskNo = checkTaskNumber(parts[1]);
-        markTask(tasks.get(taskNo - 1), mark);
-        storage.save(tasks);
-    }
-
-    private int checkTaskNumber(String number) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
-        int taskNo;
-        try {
-            taskNo = Integer.parseInt(number);
-        } catch (NumberFormatException e) {
-            throw new InvalidTaskNumberException("Can count 123 or not... Give me a proper number!");
-        }
-
-        if (taskNo < 1 || taskNo > tasks.size()) {
-            throw new TaskIndexOutOfBoundsException("Your agnes.task number is out of my range! Try the command 'list' to know how many agnes.task you have :))");
-        }
-        return taskNo;
-    }
-
     private void handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
             throw new InvalidTaskNumberException("Don't play play... Give me a agnes.task number!");
         }
 
-        int taskNo = checkTaskNumber(parts[1]);
+        int taskNo = tasks.checkTaskNumber(parts[1]);
         deleteTask(taskNo);
         storage.save(tasks);
     }
@@ -219,28 +87,15 @@ public class Agnes {
         ui.printDottedLine();
     }
 
-    private void listItemsOnDate(String request) throws InvalidDescriptionException {
-        String content = request.substring(3);
-        String datePart = content.trim();
-
-        LocalDate date;
-
+    private void showTasksOnDate(String dateStr) {
         try {
-            date = DateTimeUtil.parseDateTime(datePart).toLocalDate();
+            LocalDate date = DateTimeUtil.parseDateTime(dateStr).toLocalDate();
+            List<Task> tasksOnDate = tasks.getTasksOnDate(date);
+            ui.printTasksOnDate(tasksOnDate, date);
         } catch (DateTimeParseException e) {
-            throw new InvalidDescriptionException(
+            ui.printError(new InvalidDescriptionException(
                     "Date format should be yyyy-MM-dd"
-            );
+            ));
         }
-        ui.printDottedLine();
-        int i = 1;
-        for (Task t : tasks.getAll()) {
-            if (t.fallsOnDate(date)) {
-                print(i + ". " + tasks.get(i - 1));
-                i++;
-            }
-        }
-        ui.printDottedLine();
     }
-
 }
