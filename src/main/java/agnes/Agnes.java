@@ -11,8 +11,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 
+import task.TaskList;
+import ui.Ui;
+
 public class Agnes {
-    private List<Task> tasks = new ArrayList<>();
+    private TaskList tasks = new TaskList();
     private final static String FILE_PATH = "./data/tasks.txt";
     private Ui ui = new Ui();
 
@@ -246,7 +249,7 @@ public class Agnes {
         }
         ui.printDottedLine();
         int i = 1;
-        for (Task t : tasks) {
+        for (Task t : tasks.getAll()) {
             if (t.fallsOnDate(date)) {
                 print(i + ". " + tasks.get(i - 1));
                 i++;
