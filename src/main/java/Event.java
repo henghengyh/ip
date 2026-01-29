@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Event extends Task {
@@ -27,6 +28,15 @@ public class Event extends Task {
                 DateTimeUtil.formatDateTime(from),
                 DateTimeUtil.formatDateTime(to)
         );
+    }
+
+    @Override
+    public boolean fallsOnDate(LocalDate date) {
+        LocalDate start = this.from.toLocalDate();
+        LocalDate end = this.to.toLocalDate();
+
+        return (date.equals(start) || date.isAfter(start)) &&
+                (date.equals(end) || date.isBefore(end));
     }
 }
 

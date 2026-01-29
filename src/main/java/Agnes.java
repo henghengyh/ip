@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -52,6 +53,9 @@ public class Agnes {
                     return;
                 case LIST:
                     listItems();
+                    break;
+                case ON:
+                    listItemsOnDate(request);
                     break;
                 case MARK:
                     handleMark(request, true);
@@ -222,6 +226,30 @@ public class Agnes {
         printDottedLine();
         for (int i = 1; i <= tasks.size(); i++)
             print(i + ". " + tasks.get(i - 1));
+        printDottedLine();
+    }
+
+    private void listItemsOnDate(String request) throws InvalidDescriptionException {
+        String content = request.substring(3);
+        String datePart = content.trim();
+
+        LocalDate date;
+
+        try {
+            date = DateTimeUtil.parseDateTime(datePart).toLocalDate();
+        } catch (DateTimeParseException e) {
+            throw new InvalidDescriptionException(
+                    "Date format should be yyyy-MM-dd"
+            );
+        }
+        printDottedLine();
+        int i = 1;
+        for (Task t : tasks) {
+            if (t.fallsOnDate(date)) {
+                print(i + ". " + tasks.get(i - 1));
+                i++;
+            }
+        }
         printDottedLine();
     }
 

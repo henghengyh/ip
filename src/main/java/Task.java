@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class Task {
     private String message;
     private boolean complete;
@@ -23,6 +25,7 @@ public class Task {
         return (complete ? "X" : " "); // mark done task with X
     }
 
+    @Override
     public String toString() {
         return String.format("[%s] %s", this.getStatusIcon(), this.getMessage());
     }
@@ -32,5 +35,9 @@ public class Task {
                 "%s | %s",
                 complete ? "1" : 0,
                 this.getMessage());
+    }
+
+    public boolean fallsOnDate(LocalDate date) {
+        return false;
     }
 }
