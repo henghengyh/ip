@@ -35,7 +35,7 @@ public class TaskList {
     }
 
     public List<Task> getTasksOnDate(LocalDate date) {
-        return tasks.stream()
+        return this.tasks.stream()
                 .filter(t -> t.fallsOnDate(date))
                 .toList();
     }

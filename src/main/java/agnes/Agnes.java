@@ -15,8 +15,7 @@ public class Agnes {
     public Agnes() {
         this.tasks = new TaskList();
         this.storage = new Storage("./data/tasks.txt");
-
-        ui = new Ui();
+        this.ui = new Ui();
 
         parser = new Parser(tasks, storage, ui);
     }

@@ -1,23 +1,44 @@
 	------------------------------------
-	Hello thereeee! I'm agnes.Agnes
+	Hello thereeee! I'm Agnes
 	What can I do for you?
 	------------------------------------
 	------------------------------------
-	New agnes.task received. I've added this agnes.task.
-		[T][ ] x
+	New task received. I've added this task.
+		[T] [ ] x
 	Now you have 1 tasks in the list.
 	------------------------------------
 	------------------------------------
-	New agnes.task received. I've added this agnes.task.
-		[D][ ] y (by: y1)
+	Hellos, tell me what description you want!
+	------------------------------------
+	------------------------------------
+	New task received. I've added this task.
+		[D] [ ] y1 (by: Jan 30 2026)
 	Now you have 2 tasks in the list.
 	------------------------------------
 	------------------------------------
-	New agnes.task received. I've added this agnes.task.
-		[E][ ] z (from: z1 to: z2)
+	New task received. I've added this task.
+		[D] [ ] y2 (by: Jan 30 2026 08:00)
 	Now you have 3 tasks in the list.
 	------------------------------------
 	------------------------------------
+	New task received. I've added this task.
+		[E] [ ] z1 (from: Jan 30 2026 01:00 to: Jan 30 2026 13:40)
+	Now you have 4 tasks in the list.
+	------------------------------------
+	------------------------------------
+	New task received. I've added this task.
+		[E] [ ] z2 (from: Feb 10 2026 20:00 to: Feb 11 2026 23:59)
+	Now you have 5 tasks in the list.
+	------------------------------------
+	------------------------------------
+	New task received. I've added this task.
+		[E] [ ] z3 (from: Feb 11 2026 to: Feb 13 2026)
+	Now you have 6 tasks in the list.
+	------------------------------------
+	------------------------------------
+	Specify your deadline using '/by'...
+	------------------------------------
+	------------------------------------
 	Specify your deadline using '/by'...
 	------------------------------------
 	------------------------------------
@@ -33,22 +54,38 @@
 	Specify your event duration using '/from' and '/to'...
 	------------------------------------
 	------------------------------------
-	1. [T][ ] x
-	2. [D][ ] y (by: y1)
-	3. [E][ ] z (from: z1 to: z2)
+	1. [T] [ ] x
+	2. [D] [ ] y1 (by: Jan 30 2026)
+	3. [D] [ ] y2 (by: Jan 30 2026 08:00)
+	4. [E] [ ] z1 (from: Jan 30 2026 01:00 to: Jan 30 2026 13:40)
+	5. [E] [ ] z2 (from: Feb 10 2026 20:00 to: Feb 11 2026 23:59)
+	6. [E] [ ] z3 (from: Feb 11 2026 to: Feb 13 2026)
 	------------------------------------
 	------------------------------------
-	Nice! I've marked this agnes.task as done:
-		[T][X] x
+	Nice! I've marked this task as done:
+		[T] [X] x
 	------------------------------------
 	------------------------------------
-	Nice! I've marked this agnes.task as done:
-		[D][X] y (by: y1)
+	Nice! I've marked this task as done:
+		[D] [X] y1 (by: Jan 30 2026)
 	------------------------------------
 	------------------------------------
-	1. [T][X] x
-	2. [D][X] y (by: y1)
-	3. [E][ ] z (from: z1 to: z2)
+	Don't play play... Give me a task number!
+	------------------------------------
+	------------------------------------
+	Your task number is out of my range! Try the command 'list' to know how many task you have :))
+	------------------------------------
+	------------------------------------
+	1. [T] [X] x
+	2. [D] [X] y1 (by: Jan 30 2026)
+	3. [D] [ ] y2 (by: Jan 30 2026 08:00)
+	4. [E] [ ] z1 (from: Jan 30 2026 01:00 to: Jan 30 2026 13:40)
+	5. [E] [ ] z2 (from: Feb 10 2026 20:00 to: Feb 11 2026 23:59)
+	6. [E] [ ] z3 (from: Feb 11 2026 to: Feb 13 2026)
+	------------------------------------
+	------------------------------------
+	1. [E] [ ] z2 (from: Feb 10 2026 20:00 to: Feb 11 2026 23:59)
+	2. [E] [ ] z3 (from: Feb 11 2026 to: Feb 13 2026)
 	------------------------------------
 	------------------------------------
 	Goodbye! Have a wonderful day ahead!

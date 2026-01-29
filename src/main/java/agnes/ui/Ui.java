@@ -1,18 +1,10 @@
 package agnes.ui;
 
 import agnes.Agnes;
-import agnes.parser.Command;
-
-import agnes.exception.InvalidCommandException;
-import agnes.exception.InvalidDescriptionException;
-import agnes.exception.InvalidTaskNumberException;
-import agnes.exception.TaskIndexOutOfBoundsException;
 import agnes.task.Task;
 import agnes.task.TaskList;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 import java.util.List;
 
 public class Ui {
@@ -34,7 +26,9 @@ public class Ui {
     }
 
     public void print(Object... objs) {
-        for (Object obj : objs) System.out.println("\t" + obj);
+        for (Object obj : objs) {
+            System.out.println("\t" + obj);
+        }
     }
 
     public void printReply(Object... objs) {
@@ -95,8 +89,9 @@ public class Ui {
 
     public void printTasks(TaskList tasks) {
         printDottedLine();
-        for (int i = 1; i <= tasks.size(); i++)
+        for (int i = 1; i <= tasks.size(); i++) {
             print(i + ". " + tasks.get(i - 1));
+        }
         printDottedLine();
     }
 }
