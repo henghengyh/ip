@@ -1,7 +1,12 @@
-public class Deadline extends Task {
-    protected String by;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadline(String message, String by) {
+public class Deadline extends Task {
+    protected LocalDateTime by;
+    private final DateTimeFormatter formatDTH = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+    public Deadline(String message, LocalDateTime by) {
         super(message);
         this.by = by;
     }
@@ -11,7 +16,8 @@ public class Deadline extends Task {
         return String.format(
                 "[D] %s (by: %s)",
                 super.toString(),
-                this.by);
+                DateTimeUtil.formatDateTime(this.by)
+        );
     }
 
     @Override
@@ -19,7 +25,12 @@ public class Deadline extends Task {
         return String.format(
                 "E | %s | %s",
                 super.toFileFormat(),
-                this.by
+                DateTimeUtil.formatDateTime(this.by)
         );
+    }
+
+    @Override
+    public boolean fallsOnDate(LocalDate date) {
+        return this.by.toLocalDate().equals(date);
     }
 }

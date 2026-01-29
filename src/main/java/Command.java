@@ -2,6 +2,7 @@ public enum Command {
     HI,
     BYE,
     LIST,
+    ON,
     TODO,
     DEADLINE,
     EVENT,

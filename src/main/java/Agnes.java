@@ -1,4 +1,8 @@
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -50,6 +54,9 @@ public class Agnes {
                 case LIST:
                     listItems();
                     break;
+                case ON:
+                    listItemsOnDate(request);
+                    break;
                 case MARK:
                     handleMark(request, true);
                     break;
@@ -86,7 +93,7 @@ public class Agnes {
             }
 
             content = request.substring(5);
-            t = new ToDo(content);
+            t = new ToDo(content.trim());
             addTask(t);
             break;
         case DEADLINE:
@@ -98,8 +105,18 @@ public class Agnes {
 
             content = request.substring(9);
             String[] deadlineInfo = content.split(" /by ");
-            t = new Deadline(deadlineInfo[0], deadlineInfo[1]);
-            addTask(t);
+            String datePart = deadlineInfo[1].trim();
+
+            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+            try {
+                LocalDateTime by = DateTimeUtil.parseDateTime(datePart);
+                t = new Deadline(deadlineInfo[0].trim(), by);
+                addTask(t);
+            } catch (DateTimeParseException e) {
+                throw new InvalidDescriptionException(
+                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
+                );
+            }
             break;
         case EVENT:
             if (!request.contains(" /from ") || !request.contains(" /to ")) {
@@ -111,8 +128,20 @@ public class Agnes {
             content = request.substring(6);
             String[] eventInfo = content.split(" /from ");
             String[] fromToInfo = eventInfo[1].split(" /to ");
-            t = new Event(eventInfo[0], fromToInfo[0], fromToInfo[1]);
-            addTask(t);
+            String fromPart = fromToInfo[0].trim();
+            String toPart = fromToInfo[1].trim();
+
+            try {
+                LocalDateTime from = DateTimeUtil.parseDateTime(fromPart);
+                LocalDateTime to = DateTimeUtil.parseDateTime(toPart);
+
+                t = new Event(eventInfo[0].trim(), from, to);
+                addTask(t);
+            } catch (DateTimeParseException e) {
+                throw new InvalidDescriptionException(
+                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
+                );
+            }
             break;
         default:
             throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
@@ -197,6 +226,30 @@ public class Agnes {
         printDottedLine();
         for (int i = 1; i <= tasks.size(); i++)
             print(i + ". " + tasks.get(i - 1));
+        printDottedLine();
+    }
+
+    private void listItemsOnDate(String request) throws InvalidDescriptionException {
+        String content = request.substring(3);
+        String datePart = content.trim();
+
+        LocalDate date;
+
+        try {
+            date = DateTimeUtil.parseDateTime(datePart).toLocalDate();
+        } catch (DateTimeParseException e) {
+            throw new InvalidDescriptionException(
+                    "Date format should be yyyy-MM-dd"
+            );
+        }
+        printDottedLine();
+        int i = 1;
+        for (Task t : tasks) {
+            if (t.fallsOnDate(date)) {
+                print(i + ". " + tasks.get(i - 1));
+                i++;
+            }
+        }
         printDottedLine();
     }
 

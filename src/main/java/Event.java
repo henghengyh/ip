@@ -1,7 +1,10 @@
-public class Event extends Task {
-    protected String from, to;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-    public Event(String message, String from, String to) {
+public class Event extends Task {
+    protected LocalDateTime from, to;
+
+    public Event(String message, LocalDateTime from, LocalDateTime to) {
         super(message);
         this.from = from;
         this.to = to;
@@ -12,8 +15,8 @@ public class Event extends Task {
         return String.format(
                 "[E] %s (from: %s to: %s)",
                 super.toString(),
-                this.from,
-                this.to
+                DateTimeUtil.formatDateTime(from),
+                DateTimeUtil.formatDateTime(to)
         );
     }
 
@@ -22,9 +25,18 @@ public class Event extends Task {
         return String.format(
                 "E | %s | from %s to: %s",
                 super.toFileFormat(),
-                this.from,
-                this.to
+                DateTimeUtil.formatDateTime(from),
+                DateTimeUtil.formatDateTime(to)
         );
+    }
+
+    @Override
+    public boolean fallsOnDate(LocalDate date) {
+        LocalDate start = this.from.toLocalDate();
+        LocalDate end = this.to.toLocalDate();
+
+        return (date.equals(start) || date.isAfter(start)) &&
+                (date.equals(end) || date.isBefore(end));
     }
 }
 
