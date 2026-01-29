@@ -1,4 +1,5 @@
-import java.io.FileNotFoundException;
+package agnes;
+
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,6 +14,7 @@ import java.io.File;
 public class Agnes {
     private List<Task> tasks = new ArrayList<>();
     private final static String FILE_PATH = "./data/tasks.txt";
+    private Ui ui = new Ui();
 
     public static void main(String[] args) {
         Agnes myBot = new Agnes();
@@ -27,14 +29,14 @@ public class Agnes {
 
     // DEFAULT CONVERSATIONS
     private void startConversation() {
-        printReply(
+        ui.printReply(
                 "Hello thereeee! I'm " + Agnes.class.getName(),
                 "What can I do for you?"
         );
     }
 
     private void endConversation() {
-        printReply("Goodbye! Have a wonderful day ahead!");
+        ui.printReply("Goodbye! Have a wonderful day ahead!");
     }
 
     // USER INPUT
@@ -46,24 +48,24 @@ public class Agnes {
             Command command = Command.from(keyword);
             try {
                 switch (command) {
-                case HI:
-                    printReply("Helloss! What can I do for you?");
+                case Command.HI:
+                    ui.printReply("Helloss! What can I do for you?");
                     break;
-                case BYE:
+                case Command.BYE:
                     return;
-                case LIST:
+                case Command.LIST:
                     listItems();
                     break;
-                case ON:
+                case Command.ON:
                     listItemsOnDate(request);
                     break;
-                case MARK:
+                case Command.MARK:
                     handleMark(request, true);
                     break;
-                case UNMARK:
+                case Command.UNMARK:
                     handleMark(request, false);
                     break;
-                case DELETE:
+                case Command.DELETE:
                     handleDelete(request);
                     break;
                 default:
@@ -73,7 +75,7 @@ public class Agnes {
                      | InvalidTaskNumberException
                      | TaskIndexOutOfBoundsException
                      | InvalidCommandException e) {
-                printError(e);
+                ui.printError(e);
             }
         }
     }
@@ -85,7 +87,7 @@ public class Agnes {
         Task t;
         String content;
         switch (cmd) {
-        case TODO:
+        case Command.TODO:
             if (request.length() <= 5) {
                 throw new InvalidDescriptionException(
                         "Hellos, tell me what description you want!"
@@ -96,7 +98,7 @@ public class Agnes {
             t = new ToDo(content.trim());
             addTask(t);
             break;
-        case DEADLINE:
+        case Command.DEADLINE:
             if (!request.contains(" /by ")) {
                 throw new InvalidDescriptionException(
                         "Specify your deadline using '/by'..."
@@ -118,7 +120,7 @@ public class Agnes {
                 );
             }
             break;
-        case EVENT:
+        case Command.EVENT:
             if (!request.contains(" /from ") || !request.contains(" /to ")) {
                 throw new InvalidDescriptionException(
                         "Specify your event duration using '/from' and '/to'..."
@@ -187,13 +189,13 @@ public class Agnes {
     private void markTask(Task task, boolean b) {
         if (b) {
             task.mark();
-            printReply(
+            ui.printReply(
                     "Nice! I've marked this task as done:",
                     "\t" + task
             );
         } else {
             task.unmark();
-            printReply(
+            ui.printReply(
                     "OK, I've marked this task as not done yet:",
                     "\t" + task
             );
@@ -202,31 +204,31 @@ public class Agnes {
 
     private void addTask(Task t) {
         tasks.add(t);
-        printDottedLine();
-        print("New task received. I've added this task.");
-        print("\t" + t);
-        print(String.format("Now you have %d tasks in the list.", tasks.size()));
-        printDottedLine();
-        printTasksToFile(Agnes.FILE_PATH);
+        ui.printDottedLine();
+        ui.print("New task received. I've added this task.");
+        ui.print("\t" + t);
+        ui.print(String.format("Now you have %d tasks in the list.", tasks.size()));
+        ui.printDottedLine();
+        ui.printTasksToFile(Agnes.FILE_PATH);
     }
 
     private void deleteTask(int x) {
         Task toBeRemoved = this.tasks.get(x - 1);
-        printDottedLine();
-        print("Noted. I've removed this task:");
-        print("\t" + toBeRemoved);
+        ui.printDottedLine();
+        ui.print("Noted. I've removed this task:");
+        ui.print("\t" + toBeRemoved);
         tasks.remove(x - 1);
-        print(String.format("Now you have %d tasks in the list.", tasks.size()));
-        printDottedLine();
+        ui.print(String.format("Now you have %d tasks in the list.", tasks.size()));
+        ui.printDottedLine();
         printTasksToFile(Agnes.FILE_PATH);
     }
 
     // ALL PRINT STATEMENTS
     private void listItems() {
-        printDottedLine();
+        ui.printDottedLine();
         for (int i = 1; i <= tasks.size(); i++)
             print(i + ". " + tasks.get(i - 1));
-        printDottedLine();
+        ui.printDottedLine();
     }
 
     private void listItemsOnDate(String request) throws InvalidDescriptionException {
@@ -242,7 +244,7 @@ public class Agnes {
                     "Date format should be yyyy-MM-dd"
             );
         }
-        printDottedLine();
+        ui.printDottedLine();
         int i = 1;
         for (Task t : tasks) {
             if (t.fallsOnDate(date)) {
@@ -250,28 +252,9 @@ public class Agnes {
                 i++;
             }
         }
-        printDottedLine();
+        ui.printDottedLine();
     }
 
-    private void printDottedLine() {
-        System.out.println("\t------------------------------------");
-    }
-
-    private void print(Object... objs) {
-        for (Object obj : objs) System.out.println("\t" + obj);
-    }
-
-    private void printReply(Object... objs) {
-        printDottedLine();
-        print(objs);
-        printDottedLine();
-    }
-
-    private void printError(Exception e) {
-        printDottedLine();
-        print(e.getMessage());
-        printDottedLine();
-    }
 
     private static void writeToFile(String filePath, String textToAdd) throws IOException {
         File file = new File(filePath);
@@ -300,7 +283,7 @@ public class Agnes {
         } catch (IOException e) {
             // Since writeToFile conducts defensive programming checks, we
             // Do not expect any exception thrown by it
-            print(e);
+            ui.print(e);
         }
     }
 
