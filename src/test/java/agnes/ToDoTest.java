@@ -22,7 +22,7 @@ public class ToDoTest {
         t.mark();
 
         String expected = "X";
-        String actual = t.getStatusIcon();
-        assertEquals(expected, actual);
+        String output = t.getStatusIcon();
+        assertEquals(expected, output);
     }
 }

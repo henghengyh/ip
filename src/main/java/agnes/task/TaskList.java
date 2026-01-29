@@ -49,7 +49,7 @@ public class TaskList {
         }
 
         if (taskNo < 1 || taskNo > tasks.size()) {
-            throw new TaskIndexOutOfBoundsException("Your agnes.task number is out of my range! Try the command 'list' to know how many agnes.task you have :))");
+            throw new TaskIndexOutOfBoundsException("Your task number is out of my range! Try the command 'list' to know how many tasks you have :))");
         }
         return taskNo;
     }
