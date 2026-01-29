@@ -11,6 +11,7 @@ public enum Command {
     MARK,
     UNMARK,
     DELETE,
+    FIND,
     UNKNOWN;
 
     public static Command from(String input) {

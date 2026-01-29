@@ -49,12 +49,26 @@ public class Ui {
         if (tasks.isEmpty()) {
             print("No tasks found on " + date);
         } else {
-            int i = 1;
-            for (Task t : tasks) {
-                print(i++ + ". " + t);
-            }
+            printTasksInSeq(tasks);
         }
         printDottedLine();
+    }
+
+    public void printSearchTasks(List<Task> tasks, String keyword) {
+        printDottedLine();
+        if (tasks.isEmpty()) {
+            print("No tasks with keyword: " + keyword);
+        } else {
+            printTasksInSeq(tasks);
+        }
+        printDottedLine();
+    }
+
+    private void printTasksInSeq(List<Task> tasks) {
+        int i = 1;
+        for (Task t : tasks) {
+            print(i++ + ". " + t);
+        }
     }
 
     public void printTaskAdded(Task t, int totalTasks) {

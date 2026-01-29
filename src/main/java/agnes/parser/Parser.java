@@ -55,6 +55,9 @@ public class Parser {
                 case DELETE:
                     handleDelete(request);
                     break;
+                case FIND:
+                    handleFind(request);
+                    break;
                 default:
                     handleCommands(request);
                 }
@@ -185,5 +188,10 @@ public class Parser {
         LocalDate date = DateTimeUtil.parseDateTime(request.substring(3)).toLocalDate();
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
         ui.printTasksOnDate(filteredTasks, date);
+    }
+
+    private void handleFind(String request) {
+        String content = request.substring(5);
+        ui.printSearchTasks(tasks.find(content), content);
     }
 }
