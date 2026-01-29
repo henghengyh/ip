@@ -258,36 +258,4 @@ public class Agnes {
         ui.printDottedLine();
     }
 
-
-    private static void writeToFile(String filePath, String textToAdd) throws IOException {
-        File file = new File(filePath);
-
-        // Defensive Programming, verify
-        // 1. The parent folder exist
-        // 2. The file to be overwritten in exists
-        File parentDir = file.getParentFile();
-        if (parentDir != null && !parentDir.exists()) parentDir.mkdirs();
-        if (!file.exists()) file.createNewFile();
-
-        // Using overwriting mode; Use (filePath, true) if want to append
-        FileWriter fw = new FileWriter(filePath);
-        fw.write(textToAdd);
-        fw.close();
-    }
-
-    private void printTasksToFile(String filePath) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= tasks.size(); i++) {
-            sb.append(tasks.get(i - 1).toFileFormat())
-                    .append("\n");
-        }
-        try {
-            Agnes.writeToFile(FILE_PATH, sb.toString());
-        } catch (IOException e) {
-            // Since writeToFile conducts defensive programming checks, we
-            // Do not expect any exception thrown by it
-            ui.print(e);
-        }
-    }
-
 }
