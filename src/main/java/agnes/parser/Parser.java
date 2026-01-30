@@ -253,6 +253,11 @@ public class Parser {
         ui.printTasksOnDate(filteredTasks, date);
     }
 
+    /**
+     * Handles any request to find all tasks with a keyword.
+     *
+     * @param request   The full user input string containing the keyword.
+     */
     private void handleFind(String request) {
         String content = request.substring(5);
         ui.printSearchTasks(tasks.find(content), content);
