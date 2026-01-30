@@ -113,8 +113,6 @@ public class Ui {
         printDottedLine();
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Prints a list of tasks with numbering format
      * <p>
@@ -123,7 +121,6 @@ public class Ui {
      *
      * @param tasks the list of tasks to be printed
      */
->>>>>>> a-javadoc
     private void printTasksInSeq(List<Task> tasks) {
         int i = 1;
         for (Task t : tasks) {
