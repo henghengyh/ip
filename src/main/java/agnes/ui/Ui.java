@@ -98,6 +98,40 @@ public class Ui {
     }
 
     /**
+     * Prints a list of tasks containing a certain given keyword.
+     * <p>
+     * If the list is empty, prints a message indicating no tasks were found.
+     * </p>
+     *
+     * @param tasks     the list of tasks containing the given keyword
+     * @param keyword   the keyword to search for
+     */
+    public void printSearchTasks(List<Task> tasks, String keyword) {
+        printDottedLine();
+        if (tasks.isEmpty()) {
+            print("No tasks with keyword: " + keyword);
+        } else {
+            printTasksInSeq(tasks);
+        }
+        printDottedLine();
+    }
+
+    /**
+     * Prints a list of tasks with numbering format
+     * <p>
+     * If the list is empty, prints nothing
+     * </p>
+     *
+     * @param tasks the list of tasks to be printed
+     */
+    private void printTasksInSeq(List<Task> tasks) {
+        int i = 1;
+        for (Task t : tasks) {
+            print(i++ + ". " + t);
+        }
+    }
+
+    /**
      * Prints a message indicating that a new task has been added.
      *
      * @param t          the task that was added
@@ -129,7 +163,7 @@ public class Ui {
      * Prints a message indicating whether a task has been marked as done or not done.
      *
      * @param task the task being marked
-     * @param done true if the task is marked as done, false otherwise
+     * @param b     true if the task is marked as done, false otherwise
      */
     public void printTaskMarked(Task task, boolean b) {
         if (b) {
