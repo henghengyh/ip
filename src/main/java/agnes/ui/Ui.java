@@ -131,15 +131,12 @@ public class Ui {
         }
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Prints a message indicating that a new task has been added.
      *
      * @param t          the task that was added
      * @param totalTasks the total number of tasks after adding
      */
->>>>>>> a-javadoc
     public void printTaskAdded(Task t, int totalTasks) {
         printDottedLine();
         print("New task received. I've added this task:");
