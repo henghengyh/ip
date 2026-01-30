@@ -6,6 +6,15 @@ import java.time.format.DateTimeFormatter;
 
 import agnes.util.DateTimeUtil;
 
+/**
+ * Represents a Deadline task with a description, completion status and
+ * due date.
+ * <p>
+ * A {@code Deadline} extends {@link Task} by adding a due date-time field.
+ * It supports date-based filtering and formatted display of the deadline.
+ * Deadlines are considered to fall on a date if their due date matches
+ * that calendar date (time is ignored for comparison).
+ */
 public class Deadline extends Task {
     protected LocalDateTime by;
     private final DateTimeFormatter formatDTH = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
@@ -33,6 +42,16 @@ public class Deadline extends Task {
         );
     }
 
+    /**
+     * Determines whether this deadline occurs on the specified date.
+     * <p>
+     * A {@code Deadline} is considered to fall on a date if its due
+     * date-time ({@code by}) has the same calendar date, ignoring the time.
+     *
+     * @param date The date to compare against the deadline's due date.
+     * @return {@code true} if the deadline is due on the given date,
+     *         otherwise {@code false}.
+     */
     @Override
     public boolean fallsOnDate(LocalDate date) {
         return this.by.toLocalDate().equals(date);

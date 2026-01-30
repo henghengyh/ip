@@ -1,5 +1,11 @@
 package agnes.task;
 
+/**
+ * Represents a ToDo task with a description, completion status.
+ * <p>
+ * A {@code ToDo} extends {@link Task}.
+ * It supports formatted display of the ToDo.
+ */
 public class ToDo extends Task {
 
     public ToDo(String message) {
