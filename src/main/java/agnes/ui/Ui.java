@@ -89,10 +89,7 @@ public class Ui {
         if (tasks.isEmpty()) {
             print("No tasks found on " + date);
         } else {
-            int i = 1;
-            for (Task t : tasks) {
-                print(i++ + ". " + t);
-            }
+            printTasksInSeq(tasks);
         }
         printDottedLine();
     }
@@ -116,6 +113,8 @@ public class Ui {
         printDottedLine();
     }
 
+<<<<<<< HEAD
+=======
     /**
      * Prints a list of tasks with numbering format
      * <p>
@@ -124,6 +123,7 @@ public class Ui {
      *
      * @param tasks the list of tasks to be printed
      */
+>>>>>>> a-javadoc
     private void printTasksInSeq(List<Task> tasks) {
         int i = 1;
         for (Task t : tasks) {
@@ -131,12 +131,15 @@ public class Ui {
         }
     }
 
+<<<<<<< HEAD
+=======
     /**
      * Prints a message indicating that a new task has been added.
      *
      * @param t          the task that was added
      * @param totalTasks the total number of tasks after adding
      */
+>>>>>>> a-javadoc
     public void printTaskAdded(Task t, int totalTasks) {
         printDottedLine();
         print("New task received. I've added this task:");
