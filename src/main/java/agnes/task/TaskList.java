@@ -1,11 +1,11 @@
 package agnes.task;
 
-import agnes.exception.InvalidTaskNumberException;
-import agnes.exception.TaskIndexOutOfBoundsException;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import agnes.exception.InvalidTaskNumberException;
+import agnes.exception.TaskIndexOutOfBoundsException;
 
 /**
  * Represents a list of tasks that can be managed, retrieved, or filtered.
@@ -106,11 +106,19 @@ public class TaskList {
         }
 
         if (taskNo < 1 || taskNo > tasks.size()) {
-            throw new TaskIndexOutOfBoundsException("Your task number is out of my range! Try the command 'list' to know how many tasks you have :))");
+            throw new TaskIndexOutOfBoundsException(
+                    "Your task number is out of my range! "
+                            + "Try the command 'list' to know how many tasks you have :))"
+            );
         }
         return taskNo;
     }
-
+    /**
+     * Returns a list of tasks that contains a given keyword.
+     *
+     * @param keyword   the keyword to search tasks by
+     * @return a List of tasks that contains the given keyword
+     */
     public List<Task> find(String keyword) {
         List<Task> results = new ArrayList<>();
         for (Task t : this.tasks) {

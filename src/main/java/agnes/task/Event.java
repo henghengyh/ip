@@ -15,8 +15,16 @@ import agnes.util.DateTimeUtil;
  * in the event's duration (time is ignored for comparison).
  */
 public class Event extends Task {
-    protected LocalDateTime from, to;
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
+    /**
+     * Constructs an Event task with a description and start/end date-time.
+     *
+     * @param message   Description of the event.
+     * @param from      Start date (and time; optional) of the event.
+     * @param to        End date (and time; optional) of the event.
+     */
     public Event(String message, LocalDateTime from, LocalDateTime to) {
         super(message);
         this.from = from;
@@ -60,8 +68,8 @@ public class Event extends Task {
         LocalDate start = this.from.toLocalDate();
         LocalDate end = this.to.toLocalDate();
 
-        return (date.equals(start) || date.isAfter(start)) &&
-                (date.equals(end) || date.isBefore(end));
+        return (date.equals(start) || date.isAfter(start))
+                && (date.equals(end) || date.isBefore(end));
     }
 }
 

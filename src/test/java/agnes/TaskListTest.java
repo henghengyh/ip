@@ -1,19 +1,21 @@
 package agnes;
 
-import agnes.exception.InvalidTaskNumberException;
-import agnes.exception.TaskIndexOutOfBoundsException;
-import agnes.task.TaskList;
-import agnes.task.ToDo;
-import agnes.task.Deadline;
-import agnes.task.Event;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import org.junit.jupiter.api.Test;
+
+import agnes.exception.InvalidTaskNumberException;
+import agnes.exception.TaskIndexOutOfBoundsException;
+import agnes.task.Deadline;
+import agnes.task.Event;
+import agnes.task.TaskList;
+import agnes.task.ToDo;
 
 // This is a NON-trivial test suite
 public class TaskListTest {
@@ -42,7 +44,7 @@ public class TaskListTest {
     }
 
     @Test
-    public void checkTaskNumber_valid_Test() {
+    public void checkTaskNumber_valid_test() {
         TaskList l = new TaskList();
         l.addTask(new ToDo("Sample task"));
         l.addTask(new ToDo("Another task"));
@@ -57,7 +59,7 @@ public class TaskListTest {
     }
 
     @Test
-    public void checkTaskNumber_invalid_Test() {
+    public void checkTaskNumber_invalid_test() {
         TaskList l = new TaskList();
         l.addTask(new ToDo("Sample task"));
 
@@ -66,8 +68,11 @@ public class TaskListTest {
             fail("Exception should be thrown for an invalid task number");
         } catch (InvalidTaskNumberException | TaskIndexOutOfBoundsException e) {
             assertTrue(
-                    e.getMessage().equals("Can count 123 or not... Give me a proper number!") ||
-                            e.getMessage().equals("Your task number is out of my range! Try the command 'list' to know how many tasks you have :))")
+                    e.getMessage().equals("Can count 123 or not... Give me a proper number!")
+                            || e.getMessage().equals(
+                                    "Your task number is out of my range! "
+                                            + "Try the command 'list' to know how many tasks you have :))"
+                    )
             );
         }
     }

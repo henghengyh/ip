@@ -1,20 +1,24 @@
 package agnes.parser;
 
-import agnes.exception.InvalidCommandException;
-import agnes.exception.InvalidDescriptionException;
-import agnes.exception.InvalidTaskNumberException;
-import agnes.exception.TaskIndexOutOfBoundsException;
-import agnes.task.*;
-import agnes.util.DateTimeUtil;
-import agnes.storage.Storage;
-import agnes.ui.Ui;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
+
+import agnes.exception.InvalidCommandException;
+import agnes.exception.InvalidDescriptionException;
+import agnes.exception.InvalidTaskNumberException;
+import agnes.exception.TaskIndexOutOfBoundsException;
+import agnes.storage.Storage;
+import agnes.task.Deadline;
+import agnes.task.Event;
+import agnes.task.Task;
+import agnes.task.TaskList;
+import agnes.task.ToDo;
+import agnes.ui.Ui;
+import agnes.util.DateTimeUtil;
 
 /**
  * Parses user input and executes the corresponding commands.
@@ -185,7 +189,8 @@ public class Parser {
      * @throws InvalidTaskNumberException       If the task number is invalid.
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
      */
-    private void handleMark(String request, boolean mark) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+    private void handleMark(String request, boolean mark)
+            throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
