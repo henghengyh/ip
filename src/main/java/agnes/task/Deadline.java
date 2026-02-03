@@ -17,8 +17,14 @@ import agnes.util.DateTimeUtil;
  */
 public class Deadline extends Task {
     protected LocalDateTime by;
-    private final DateTimeFormatter formatDTH = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+    private final DateTimeFormatter formatDth = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
 
+    /**
+     * Constructs a Deadline task with a description and due date-time.
+     *
+     * @param message   Description of the task.
+     * @param by        Due date (and time; optional) of the task.
+     */
     public Deadline(String message, LocalDateTime by) {
         super(message);
         this.by = by;

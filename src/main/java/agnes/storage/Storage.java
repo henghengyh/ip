@@ -1,10 +1,11 @@
 package agnes.storage;
 
-import agnes.task.TaskList;
-import agnes.task.Task;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import agnes.task.Task;
+import agnes.task.TaskList;
 
 /**
  * Handles saving content to local storage.
@@ -62,8 +63,12 @@ public class Storage {
         // 1. The parent folder exist
         // 2. The file to be overwritten in exists
         File parentDir = file.getParentFile();
-        if (parentDir != null && !parentDir.exists()) parentDir.mkdirs();
-        if (!file.exists()) file.createNewFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+        if (!file.exists()) {
+            file.createNewFile();
+        }
 
         // Using overwriting mode; Use (filePath, true) if want to append
         FileWriter fw = new FileWriter(filePath);

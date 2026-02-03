@@ -1,16 +1,17 @@
 package agnes;
-import agnes.ui.Ui;
-import agnes.task.Task;
-import agnes.task.ToDo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import agnes.task.Task;
+import agnes.task.ToDo;
+import agnes.ui.Ui;
 
 // This is a NON-trivial test suite
 public class UiPrintTest {
@@ -40,9 +41,9 @@ public class UiPrintTest {
         ui.printReply(message);
 
         String expected =
-                "\t------------------------------------\n" +
-                        "\tHello world!\n" +
-                        "\t------------------------------------\n";
+                "\t------------------------------------\n"
+                        + "\tHello world!\n"
+                        + "\t------------------------------------\n";
         String output = outContent.toString();
         assertEquals(expected, output);
     }
@@ -54,11 +55,11 @@ public class UiPrintTest {
         ui.printTaskAdded(t, 10);
 
         String expected =
-                "\t------------------------------------\n" +
-                        "\tNew task received. I've added this task:\n" +
-                        "\t" + "\t" + t + "\n" +
-                        "\tNow you have 10 tasks in the list.\n" +
-                        "\t------------------------------------\n";
+                "\t------------------------------------\n"
+                        + "\tNew task received. I've added this task:\n"
+                        + "\t" + "\t" + t + "\n"
+                        + "\tNow you have 10 tasks in the list.\n"
+                        + "\t------------------------------------\n";
         String output = outContent.toString();
         assertEquals(expected, output);
     }

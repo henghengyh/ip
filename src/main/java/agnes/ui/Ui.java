@@ -1,11 +1,11 @@
 package agnes.ui;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import agnes.Agnes;
 import agnes.task.Task;
 import agnes.task.TaskList;
-
-import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Handles all user interactions and output formatting for the Agnes application.
