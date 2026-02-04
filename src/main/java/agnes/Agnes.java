@@ -26,22 +26,7 @@ public class Agnes {
         parser = new Parser(tasks, storage, ui);
     }
 
-    /**
-     * Launches the Agnes application.
-     *
-     * @param args Command-line arguments (not used).
-     */
-    public static void main(String[] args) {
-        Agnes myBot = new Agnes();
-        myBot.run();
-    }
-
-    /**
-     * Starts the conversation loop between the user and the application.
-     */
-    private void run() {
-        ui.startConversation();
-        parser.userInput();
-        ui.endConversation();
+    public String getResponse(String input) {
+        return parser.parse(input);
     }
 }
