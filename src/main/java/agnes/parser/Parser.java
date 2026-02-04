@@ -51,6 +51,8 @@ public class Parser {
      * <p>
      * Valid commands trigger task operations, while invalid inputs result
      * in error messages displayed through the {@code Ui}.
+     *
+     * @return          The message to be shown to user.
      */
     public String parse(String request) {
         try {
