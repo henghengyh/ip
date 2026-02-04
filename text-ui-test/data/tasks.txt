@@ -1,0 +1,6 @@
+T | 1 | x
+E | 1 | y1 | Jan 30 2026
+E | 0 | y2 | Jan 30 2026 08:00
+E | 0 | z1 | from Jan 30 2026 01:00 to: Jan 30 2026 13:40
+E | 0 | z2 | from Feb 10 2026 20:00 to: Feb 11 2026 23:59
+E | 0 | z3 | from Feb 11 2026 to: Feb 13 2026
