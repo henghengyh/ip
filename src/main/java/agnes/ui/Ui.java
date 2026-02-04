@@ -68,8 +68,8 @@ public class Ui {
 
         StringBuilder sb = new StringBuilder(tab("Here are your tasks:\n"));
         for (int i = 1; i <= tasks.size(); i++) {
-            sb.append(tab((i + 1) + ". " + tasks.get(i)));
-            if (i < tasks.size() - 1) {
+            sb.append(tab((i) + ". " + tasks.get(i - 1)));
+            if (i < tasks.size()) {
                 sb.append("\n");
             }
         }
