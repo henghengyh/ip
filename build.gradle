@@ -29,7 +29,7 @@ test {
 }
 
 application {
-    mainClass.set("agnes.Agnes")
+    mainClass.set("agnes.ui.Main")
 }
 
 shadowJar {
