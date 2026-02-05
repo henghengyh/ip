@@ -37,7 +37,7 @@ public class Ui {
      * @return the message tabbed.
      */
     private String tab(String msg) {
-        return "\t" + msg;
+        return msg;
     }
 
     /**
