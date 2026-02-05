@@ -1,7 +1,9 @@
 package agnes.ui;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import agnes.Agnes;
 import agnes.task.Task;
@@ -20,11 +22,13 @@ public class Ui {
 
     /**
      * Wraps a message to be printed with the dotted lines for visual.
-     * @param msg the message to be processed.
+     * @param lines the message(s) to be processed.
      * @return the message wrapped with LINE.
      */
-    private String wrap(String msg) {
-        return Ui.LINE + "\n" + msg + "\n" + Ui.LINE;
+    private String wrap(String... lines) {
+        return Arrays.stream(lines)
+                .map(this::tab)
+                .collect(Collectors.joining("\n"));
     }
 
     /**
@@ -41,8 +45,10 @@ public class Ui {
      * @return the welcome message.
      */
     public List<String> getWelcomeMessage() {
-        return List.of(wrap(tab("Hello thereeee! I'm " + Agnes.class.getSimpleName())
-                + "\n" + tab("What can I do for you?")));
+        return List.of(wrap(
+                "Hello thereeee! I'm " + Agnes.class.getSimpleName(),
+                "What can I do for you?"
+        ));
     }
 
     /**
@@ -50,7 +56,7 @@ public class Ui {
      * @return the goodbye message.
      */
     public List<String> getByeMessage() {
-        return List.of(wrap(tab("Goodbye! Have a wonderful day ahead!")));
+        return List.of(wrap("Goodbye! Have a wonderful day ahead!"));
     }
 
     /**
@@ -63,17 +69,17 @@ public class Ui {
      */
     public List<String> getTasks(TaskList tasks) {
         if (tasks.size() == 0) {
-            return List.of(wrap(tab("No tasks in your list!")));
+            return List.of(wrap("No tasks in your list!"));
         }
 
-        StringBuilder sb = new StringBuilder(tab("Here are your tasks:\n"));
+        List<String> lines = new java.util.ArrayList<>();
+        lines.add("Here are your tasks:");
+
         for (int i = 1; i <= tasks.size(); i++) {
-            sb.append(tab((i) + ". " + tasks.get(i - 1)));
-            if (i < tasks.size()) {
-                sb.append("\n");
-            }
+            lines.add(i + ". " + tasks.get(i - 1));
         }
-        return List.of(wrap(sb.toString()));
+
+        return List.of(wrap(lines.toArray(new String[0])));
     }
 
     /**
@@ -82,7 +88,7 @@ public class Ui {
      * @param e the exception containing the error message
      */
     public List<String> getErrorMessage(Exception e) {
-        return List.of(wrap(tab(e.getMessage())));
+        return List.of(wrap(e.getMessage()));
     }
 
     /**
@@ -96,15 +102,18 @@ public class Ui {
      */
     public List<String> getTasksOnDate(List<Task> tasks, LocalDate date) {
         if (tasks.isEmpty()) {
-            return List.of(wrap(tab("No tasks found on " + date)));
+            return List.of(wrap("No tasks found on " + date));
         }
 
-        StringBuilder sb = new StringBuilder(tab("Tasks on " + date + ":\n"));
+        List<String> lines = new java.util.ArrayList<>();
+        lines.add("Tasks on " + date + ":");
+
         int i = 1;
         for (Task t : tasks) {
-            sb.append(tab(i++ + ". " + t)).append("\n");
+            lines.add(i++ + ". " + t);
         }
-        return List.of(wrap(sb.toString()));
+
+        return List.of(wrap(lines.toArray(new String[0])));
     }
 
     /**
@@ -118,15 +127,18 @@ public class Ui {
      */
     public List<String> getSearchTasks(List<Task> tasks, String keyword) {
         if (tasks.isEmpty()) {
-            return List.of(wrap(tab("No tasks with keyword: " + keyword)));
+            return List.of(wrap("No tasks with keyword: " + keyword));
         }
 
-        StringBuilder sb = new StringBuilder(tab("Matching tasks:\n"));
+        List<String> lines = new java.util.ArrayList<>();
+        lines.add("Matching tasks:");
+
         int i = 1;
         for (Task t : tasks) {
-            sb.append(tab(i++ + ". " + t)).append("\n");
+            lines.add(i++ + ". " + t);
         }
-        return List.of(wrap(sb.toString()));
+
+        return List.of(wrap(lines.toArray(new String[0])));
     }
 
 
@@ -137,9 +149,11 @@ public class Ui {
      * @param totalTasks the total number of tasks after adding
      */
     public List<String> getTaskAdded(Task t, int totalTasks) {
-        return List.of(wrap(tab("New task received. I've added this task:")
-                + "\n" + tab(t.toString())
-                + "\n" + tab("Now you have " + totalTasks + " tasks in the list.")));
+        return List.of(wrap(
+                "New task received. I've added this task:",
+                t.toString(),
+                "Now you have " + totalTasks + " tasks in the list."
+        ));
     }
 
     /**
@@ -149,9 +163,11 @@ public class Ui {
      * @param totalTasks the total number of tasks remaining
      */
     public List<String> getTaskDeleted(Task t, int totalTasks) {
-        return List.of(wrap(tab("Noted. I've removed this task:")
-                + "\n" + tab(t.toString())
-                + "\n" + tab("Now you have " + totalTasks + " tasks in the list.")));
+        return List.of(wrap(
+                "Noted. I've removed this task:",
+                t.toString(),
+                "Now you have " + totalTasks + " tasks in the list."
+        ));
     }
 
     /**
@@ -164,7 +180,10 @@ public class Ui {
         String msg = isDone
                 ? "Nice! I've marked this task as done:"
                 : "OK, I've marked this task as not done yet:";
-        return List.of(wrap(tab(msg) + "\n" + tab(task.toString())));
+        return List.of(wrap(
+                msg,
+                task.toString()
+        ));
     }
 
     /**
@@ -174,11 +193,11 @@ public class Ui {
      * @return          the list of curse messages to the user.
      */
     public List<String> getKnsResponse(String content) {
-        String line1 = wrap(tab("LEE YI HENG you dare to cise at me!"));
-        String line2 = wrap(tab("CIRSE"));
-        String line3 = wrap(tab("CRUISE"));
-        String line4 = wrap(tab("CURSE"));
-        String line5 = wrap(tab("KNS..."));
+        String line1 = wrap("LEE YI HENG you dare to cise at me!");
+        String line2 = wrap("CIRSE");
+        String line3 = wrap("CRUISE");
+        String line4 = wrap("CURSE");
+        String line5 = wrap("KNS...");
 
         return List.of(
                 line1, line2, line3, line4, line5
