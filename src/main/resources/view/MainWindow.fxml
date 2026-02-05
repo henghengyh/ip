@@ -16,7 +16,7 @@
          </font></TextField>
         <Button fx:id="sendButton" layoutX="327.0" layoutY="533.0" mnemonicParsing="false" onAction="#handleUserInput" prefWidth="73.0" text="Send  " AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="1.0">
          <font>
-            <Font name="Apple Chancery" size="13.0" />
+            <Font name="Noteworthy Bold" size="13.0" />
          </font></Button>
         <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" hvalue="1.0" prefHeight="865.0" prefWidth="600.0" vvalue="1.0" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
             <content>
