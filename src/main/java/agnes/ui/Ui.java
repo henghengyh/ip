@@ -10,182 +10,179 @@ import agnes.task.TaskList;
 /**
  * Handles all user interactions and output formatting for the Agnes application.
  * <p>
- * Provides methods to print messages, errors, task lists, and task updates in a
+ * Provides methods to returns messages, errors, task lists, and task updates in a
  * consistent and user-friendly manner. Also formats outputs with dotted lines for clarity.
  * </p>
  */
 public class Ui {
+
+    private static final String LINE = "\t------------------------------------";
+
     /**
-     * Prints a welcome message when the conversation with the user starts.
+     * Wraps a message to be printed with the dotted lines for visual.
+     * @param msg the message to be processed.
+     * @return the message wrapped with LINE.
      */
-    public void startConversation() {
-        printReply(
-                "Hello thereeee! I'm " + Agnes.class.getSimpleName(),
-                "What can I do for you?"
-        );
+    private String wrap(String msg) {
+        return Ui.LINE + "\n" + msg + "\n" + Ui.LINE;
+    }
+
+    /**
+     * Inserts a tab before the message.
+     * @param msg the message to be processed.
+     * @return the message tabbed.
+     */
+    private String tab(String msg) {
+        return "\t" + msg;
+    }
+
+    /**
+     * Returns a welcome message when the conversation with the user starts.
+     * @return the welcome message.
+     */
+    public List<String> getWelcomeMessage() {
+        return List.of(wrap(tab("Hello thereeee! I'm " + Agnes.class.getSimpleName())
+                + "\n" + tab("What can I do for you?")));
     }
 
     /**
      * Prints a goodbye message when the conversation with the user ends.
+     * @return the goodbye message.
      */
-    public void endConversation() {
-        printReply("Goodbye! Have a wonderful day ahead!");
-    }
-
-
-    /**
-     * Prints a horizontal dotted line for visual separation.
-     */
-    public void printDottedLine() {
-        System.out.println("\t------------------------------------");
+    public List<String> getByeMessage() {
+        return List.of(wrap(tab("Goodbye! Have a wonderful day ahead!")));
     }
 
     /**
-     * Prints each object provided as a separate line with a tab prefix.
-     *
-     * @param objs the objects to print
-     */
-    public void print(Object... objs) {
-        for (Object obj : objs) {
-            System.out.println("\t" + obj);
-        }
-    }
-
-    /**
-     * Prints a reply to the user surrounded by dotted lines.
-     *
-     * @param objs the objects to print as a reply
-     */
-    public void printReply(Object... objs) {
-        printDottedLine();
-        print(objs);
-        printDottedLine();
-    }
-
-    /**
-     * Prints an error message from an exception, surrounded by dotted lines.
-     *
-     * @param e the exception containing the error message
-     */
-    public void printError(Exception e) {
-        printDottedLine();
-        print(e.getMessage());
-        printDottedLine();
-    }
-
-
-    /**
-     * Prints a list of tasks scheduled for a specific date.
+     * Returns a list of tasks in String format to be printed.
      * <p>
-     * If the list is empty, prints a message indicating no tasks were found.
+     * If the list is empty, returns a message indicating no tasks were found.
      * </p>
      *
      * @param tasks the list of tasks on the given date
-     * @param date  the date for which tasks are printed
      */
-    public void printTasksOnDate(List<Task> tasks, LocalDate date) {
-        printDottedLine();
-
-        if (tasks.isEmpty()) {
-            print("No tasks found on " + date);
-        } else {
-            printTasksInSeq(tasks);
+    public List<String> getTasks(TaskList tasks) {
+        if (tasks.size() == 0) {
+            return List.of(wrap(tab("No tasks in your list!")));
         }
-        printDottedLine();
+
+        StringBuilder sb = new StringBuilder(tab("Here are your tasks:\n"));
+        for (int i = 1; i <= tasks.size(); i++) {
+            sb.append(tab((i) + ". " + tasks.get(i - 1)));
+            if (i < tasks.size()) {
+                sb.append("\n");
+            }
+        }
+        return List.of(wrap(sb.toString()));
     }
 
     /**
-     * Prints a list of tasks containing a certain given keyword.
+     * Returns an error message from an exception.
+     *
+     * @param e the exception containing the error message
+     */
+    public List<String> getErrorMessage(Exception e) {
+        return List.of(wrap(tab(e.getMessage())));
+    }
+
+    /**
+     * Returns a String of a list of tasks scheduled for a specific date.
      * <p>
-     * If the list is empty, prints a message indicating no tasks were found.
+     * If the list is empty, returns a message indicating no tasks were found.
+     * </p>
+     *
+     * @param tasks the list of tasks on the given date
+     * @param date  the date for which tasks are required
+     */
+    public List<String> getTasksOnDate(List<Task> tasks, LocalDate date) {
+        if (tasks.isEmpty()) {
+            return List.of(wrap(tab("No tasks found on " + date)));
+        }
+
+        StringBuilder sb = new StringBuilder(tab("Tasks on " + date + ":\n"));
+        int i = 1;
+        for (Task t : tasks) {
+            sb.append(tab(i++ + ". " + t)).append("\n");
+        }
+        return List.of(wrap(sb.toString()));
+    }
+
+    /**
+     * Returns a message of a list of tasks containing a certain given keyword.
+     * <p>
+     * If the list is empty, returns a message indicating no tasks were found.
      * </p>
      *
      * @param tasks     the list of tasks containing the given keyword
      * @param keyword   the keyword to search for
      */
-    public void printSearchTasks(List<Task> tasks, String keyword) {
-        printDottedLine();
+    public List<String> getSearchTasks(List<Task> tasks, String keyword) {
         if (tasks.isEmpty()) {
-            print("No tasks with keyword: " + keyword);
-        } else {
-            printTasksInSeq(tasks);
+            return List.of(wrap(tab("No tasks with keyword: " + keyword)));
         }
-        printDottedLine();
-    }
 
-    /**
-     * Prints a list of tasks with numbering format
-     * <p>
-     * If the list is empty, prints nothing
-     * </p>
-     *
-     * @param tasks the list of tasks to be printed
-     */
-    private void printTasksInSeq(List<Task> tasks) {
+        StringBuilder sb = new StringBuilder(tab("Matching tasks:\n"));
         int i = 1;
         for (Task t : tasks) {
-            print(i++ + ". " + t);
+            sb.append(tab(i++ + ". " + t)).append("\n");
         }
+        return List.of(wrap(sb.toString()));
     }
 
+
     /**
-     * Prints a message indicating that a new task has been added.
+     * Returns a message indicating that a new task has been added.
      *
      * @param t          the task that was added
      * @param totalTasks the total number of tasks after adding
      */
-    public void printTaskAdded(Task t, int totalTasks) {
-        printDottedLine();
-        print("New task received. I've added this task:");
-        print("\t" + t);
-        print(String.format("Now you have %d tasks in the list.", totalTasks));
-        printDottedLine();
+    public List<String> getTaskAdded(Task t, int totalTasks) {
+        return List.of(wrap(tab("New task received. I've added this task:")
+                + "\n" + tab(t.toString())
+                + "\n" + tab("Now you have " + totalTasks + " tasks in the list.")));
     }
 
     /**
-     * Prints a message indicating that a task has been deleted.
+     * Returns a message indicating that a task has been deleted.
      *
      * @param t          the task that was deleted
      * @param totalTasks the total number of tasks remaining
      */
-    public void printTaskDeleted(Task t, int totalTasks) {
-        printDottedLine();
-        print("Noted. I've removed this task:");
-        print("\t" + t);
-        print(String.format("Now you have %d tasks in the list.", totalTasks));
-        printDottedLine();
+    public List<String> getTaskDeleted(Task t, int totalTasks) {
+        return List.of(wrap(tab("Noted. I've removed this task:")
+                + "\n" + tab(t.toString())
+                + "\n" + tab("Now you have " + totalTasks + " tasks in the list.")));
     }
 
     /**
-     * Prints a message indicating whether a task has been marked as done or not done.
+     * Returns a message indicating whether a task has been marked as done or not done.
      *
      * @param task the task being marked
-     * @param b     true if the task is marked as done, false otherwise
+     * @param isDone     true if the task is marked as done, false otherwise
      */
-    public void printTaskMarked(Task task, boolean b) {
-        if (b) {
-            printReply(
-                    "Nice! I've marked this task as done:",
-                    "\t" + task
-            );
-        } else {
-            printReply(
-                    "OK, I've marked this task as not done yet:",
-                    "\t" + task
-            );
-        }
+    public List<String> getTaskMarked(Task task, boolean isDone) {
+        String msg = isDone
+                ? "Nice! I've marked this task as done:"
+                : "OK, I've marked this task as not done yet:";
+        return List.of(wrap(tab(msg) + "\n" + tab(task.toString())));
     }
 
     /**
-     * Prints all tasks in the provided TaskList with ordered-numbering.
+     * Returns a list of messages to curse at the user.
      *
-     * @param tasks the TaskList to print
+     * @param content   the message being sent to Agnes.
+     * @return          the list of curse messages to the user.
      */
-    public void printTasks(TaskList tasks) {
-        printDottedLine();
-        for (int i = 1; i <= tasks.size(); i++) {
-            print(i + ". " + tasks.get(i - 1));
-        }
-        printDottedLine();
+    public List<String> getKnsResponse(String content) {
+        String line1 = wrap(tab("LEE YI HENG you dare to cise at me!"));
+        String line2 = wrap(tab("CIRSE"));
+        String line3 = wrap(tab("CRUISE"));
+        String line4 = wrap(tab("CURSE"));
+        String line5 = wrap(tab("KNS..."));
+
+        return List.of(
+                line1, line2, line3, line4, line5
+        );
     }
+
 }

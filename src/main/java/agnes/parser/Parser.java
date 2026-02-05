@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Scanner;
 
 import agnes.exception.InvalidCommandException;
 import agnes.exception.InvalidDescriptionException;
@@ -52,47 +51,40 @@ public class Parser {
      * <p>
      * Valid commands trigger task operations, while invalid inputs result
      * in error messages displayed through the {@code Ui}.
+     *
+     * @return          The message to be shown to user.
      */
-    public void userInput() {
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            String request = sc.nextLine();
+    public List<String> parse(String request) {
+        try {
             String keyword = request.split(" ")[0];
             Command command = Command.from(keyword);
-            try {
-                switch (command) {
-                case HI:
-                    ui.printReply("Helloss! What can I do for you?");
-                    break;
-                case BYE:
-                    return;
-                case LIST:
-                    ui.printTasks(tasks);
-                    break;
-                case ON:
-                    handleOnDate(request);
-                    break;
-                case MARK:
-                    handleMark(request, true);
-                    break;
-                case UNMARK:
-                    handleMark(request, false);
-                    break;
-                case DELETE:
-                    handleDelete(request);
-                    break;
-                case FIND:
-                    handleFind(request);
-                    break;
-                default:
-                    handleCommands(request);
-                }
-            } catch (InvalidDescriptionException
-                     | InvalidTaskNumberException
-                     | TaskIndexOutOfBoundsException
-                     | InvalidCommandException e) {
-                ui.printError(e);
+            switch (command) {
+            case HI:
+                return ui.getWelcomeMessage();
+            case BYE:
+                return ui.getByeMessage();
+            case LIST:
+                return ui.getTasks(tasks);
+            case ON:
+                return handleOnDate(request);
+            case MARK:
+                return handleMark(request, true);
+            case UNMARK:
+                return handleMark(request, false);
+            case DELETE:
+                return handleDelete(request);
+            case FIND:
+                return handleFind(request);
+            case KNS:
+                return handleKns(request);
+            default:
+                return handleCommands(request);
             }
+        } catch (InvalidDescriptionException
+                 | InvalidTaskNumberException
+                 | TaskIndexOutOfBoundsException
+                 | InvalidCommandException e) {
+            return ui.getErrorMessage(e);
         }
     }
 
@@ -102,8 +94,9 @@ public class Parser {
      * @param request   The full user input string.
      * @throws InvalidDescriptionException  If the task description or format is invalid.
      * @throws InvalidCommandException      If the command is not recognised.
+     * @return          The message to be shown to user.
      */
-    public void handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
+    public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
         Command cmd = Command.from(action);
         Task t;
@@ -118,8 +111,7 @@ public class Parser {
 
             content = request.substring(5);
             t = new ToDo(content.trim());
-            addTask(t);
-            break;
+            return addTask(t);
         case DEADLINE:
             if (!request.contains(" /by ")) {
                 throw new InvalidDescriptionException(
@@ -135,13 +127,12 @@ public class Parser {
             try {
                 LocalDateTime by = DateTimeUtil.parseDateTime(datePart);
                 t = new Deadline(deadlineInfo[0].trim(), by);
-                addTask(t);
+                return addTask(t);
             } catch (DateTimeParseException e) {
                 throw new InvalidDescriptionException(
                         "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
                 );
             }
-            break;
         case EVENT:
             if (!request.contains(" /from ") || !request.contains(" /to ")) {
                 throw new InvalidDescriptionException(
@@ -160,13 +151,12 @@ public class Parser {
                 LocalDateTime to = DateTimeUtil.parseDateTime(toPart);
 
                 t = new Event(eventInfo[0].trim(), from, to);
-                addTask(t);
+                return addTask(t);
             } catch (DateTimeParseException e) {
                 throw new InvalidDescriptionException(
                         "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
                 );
             }
-            break;
         default:
             throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
         }
@@ -175,11 +165,12 @@ public class Parser {
     /**
      * Executes the adding of a {@code Task} to the {@code TaskList}.
      * @param t The {@code Task} to be added.
+     * @return          The message to be shown to user.
      */
-    private void addTask(Task t) {
+    private List<String> addTask(Task t) {
         tasks.addTask(t);
         storage.save(tasks);
-        ui.printTaskAdded(t, tasks.size());
+        return ui.getTaskAdded(t, tasks.size());
     }
 
     /**
@@ -188,34 +179,23 @@ public class Parser {
      * @param request   The full user input string.
      * @throws InvalidTaskNumberException       If the task number is invalid.
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
+     * @return          The message to be shown to user.
      */
-    private void handleMark(String request, boolean mark)
+    private List<String> handleMark(String request, boolean mark)
             throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
         }
         int taskNo = tasks.checkTaskNumber(parts[1]);
-
-        markTask(tasks.get(taskNo - 1), mark);
-        storage.save(tasks);
-    }
-
-    /**
-     * Executes the marking of a {@code Task} and printing of statements.
-     *
-     * @param task  The {@code Task} to be marked.
-     * @param b     {@code true} to mark the task as done, {@code false} to mark as not done.
-     */
-    private void markTask(Task task, boolean b) {
-        if (b) {
+        Task task = tasks.get(taskNo - 1);
+        if (mark) {
             task.mark();
-            ui.printTaskMarked(task, b);
-
         } else {
             task.unmark();
-            ui.printTaskMarked(task, b);
         }
+        storage.save(tasks);
+        return ui.getTaskMarked(task, mark);
     }
 
     /**
@@ -224,47 +204,52 @@ public class Parser {
      * @param request   The full user input string.
      * @throws InvalidTaskNumberException       If the task number is invalid.
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
+     * @return          The message to be shown to user.
      */
-    public void handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+    public List<String> handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
         }
 
         int taskNo = tasks.checkTaskNumber(parts[1]);
-        deleteTask(taskNo);
-        storage.save(tasks);
-    }
-
-    /**
-     * Executes the deleting of a {@code Task} and printing of statements.
-     *
-     * @param taskNo  The task number to delete (1-based index from the user).
-     */
-    private void deleteTask(int taskNo) {
         Task removed = tasks.removeTask(taskNo - 1);
         storage.save(tasks);
-        ui.printTaskDeleted(removed, tasks.size());
+        return ui.getTaskDeleted(removed, tasks.size());
     }
+
 
     /**
      * Handles any request to find all tasks on a specified date.
      *
      * @param request   The full user input string containing the date.
+     * @return          The message to be shown to user.
      */
-    private void handleOnDate(String request) {
+    private List<String> handleOnDate(String request) {
         LocalDate date = DateTimeUtil.parseDateTime(request.substring(3)).toLocalDate();
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
-        ui.printTasksOnDate(filteredTasks, date);
+        return ui.getTasksOnDate(filteredTasks, date);
     }
 
     /**
      * Handles any request to find all tasks with a keyword.
      *
      * @param request   The full user input string containing the keyword.
+     * @return          The message to be shown to user.
      */
-    private void handleFind(String request) {
+    private List<String> handleFind(String request) {
         String content = request.substring(5);
-        ui.printSearchTasks(tasks.find(content), content);
+        return ui.getSearchTasks(tasks.find(content), content);
+    }
+
+    /**
+     * Handles a curse word request.
+     *
+     * @param request   The full user input string containing the curse word.
+     * @return          The message to be shown to user.
+     */
+    private List<String> handleKns(String request) {
+        String content = request.substring(3).strip();
+        return ui.getKnsResponse(content);
     }
 }
