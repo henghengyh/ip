@@ -92,9 +92,9 @@ public class Parser {
      * Handles any {@code Command} given to create a {@code Task}
      *
      * @param request   The full user input string.
+     * @return          The list of messages to be shown to user.
      * @throws InvalidDescriptionException  If the task description or format is invalid.
      * @throws InvalidCommandException      If the command is not recognised.
-     * @return          The message to be shown to user.
      */
     public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
@@ -177,9 +177,9 @@ public class Parser {
      * Handles any request to mark a {@code Task}.
      *
      * @param request   The full user input string.
+     * @return          The list of messages to be shown to user.
      * @throws InvalidTaskNumberException       If the task number is invalid.
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
-     * @return          The message to be shown to user.
      */
     private List<String> handleMark(String request, boolean mark)
             throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
@@ -202,9 +202,9 @@ public class Parser {
      * Handles any request to delete a {@code Task} from a {@code TaskList}
      *
      * @param request   The full user input string.
+     * @return          The list of messages to be shown to user.
      * @throws InvalidTaskNumberException       If the task number is invalid.
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
-     * @return          The message to be shown to user.
      */
     public List<String> handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
