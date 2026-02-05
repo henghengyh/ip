@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Rectangle;
 
 
 /**
@@ -37,6 +38,14 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        Rectangle clip = new Rectangle();
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
+        clip.widthProperty().bind(displayPicture.fitWidthProperty());
+        clip.heightProperty().bind(displayPicture.fitHeightProperty());
+
+        displayPicture.setClip(clip);
     }
 
     private void flip() {

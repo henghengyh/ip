@@ -15,7 +15,8 @@ public enum Command {
     UNMARK,
     DELETE,
     FIND,
-    UNKNOWN;
+    UNKNOWN,
+    KNS;
 
     /**
      * Converts a user input string into the corresponding {@code Command}.

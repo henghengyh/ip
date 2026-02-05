@@ -40,17 +40,17 @@ public class Ui {
      * Returns a welcome message when the conversation with the user starts.
      * @return the welcome message.
      */
-    public String getWelcomeMessage() {
-        return wrap(tab("Hello thereeee! I'm " + Agnes.class.getSimpleName())
-                + "\n" + tab("What can I do for you?"));
+    public List<String> getWelcomeMessage() {
+        return List.of(wrap(tab("Hello thereeee! I'm " + Agnes.class.getSimpleName())
+                + "\n" + tab("What can I do for you?")));
     }
 
     /**
      * Prints a goodbye message when the conversation with the user ends.
      * @return the goodbye message.
      */
-    public String getByeMessage() {
-        return wrap(tab("Goodbye! Have a wonderful day ahead!"));
+    public List<String> getByeMessage() {
+        return List.of(wrap(tab("Goodbye! Have a wonderful day ahead!")));
     }
 
     /**
@@ -61,9 +61,9 @@ public class Ui {
      *
      * @param tasks the list of tasks on the given date
      */
-    public String getTasks(TaskList tasks) {
+    public List<String> getTasks(TaskList tasks) {
         if (tasks.size() == 0) {
-            return wrap(tab("No tasks in your list!"));
+            return List.of(wrap(tab("No tasks in your list!")));
         }
 
         StringBuilder sb = new StringBuilder(tab("Here are your tasks:\n"));
@@ -73,7 +73,7 @@ public class Ui {
                 sb.append("\n");
             }
         }
-        return wrap(sb.toString());
+        return List.of(wrap(sb.toString()));
     }
 
     /**
@@ -81,8 +81,8 @@ public class Ui {
      *
      * @param e the exception containing the error message
      */
-    public String getErrorMessage(Exception e) {
-        return wrap(tab(e.getMessage()));
+    public List<String> getErrorMessage(Exception e) {
+        return List.of(wrap(tab(e.getMessage())));
     }
 
     /**
@@ -94,9 +94,9 @@ public class Ui {
      * @param tasks the list of tasks on the given date
      * @param date  the date for which tasks are required
      */
-    public String getTasksOnDate(List<Task> tasks, LocalDate date) {
+    public List<String> getTasksOnDate(List<Task> tasks, LocalDate date) {
         if (tasks.isEmpty()) {
-            return wrap(tab("No tasks found on " + date));
+            return List.of(wrap(tab("No tasks found on " + date)));
         }
 
         StringBuilder sb = new StringBuilder(tab("Tasks on " + date + ":\n"));
@@ -104,7 +104,7 @@ public class Ui {
         for (Task t : tasks) {
             sb.append(tab(i++ + ". " + t)).append("\n");
         }
-        return wrap(sb.toString());
+        return List.of(wrap(sb.toString()));
     }
 
     /**
@@ -116,9 +116,9 @@ public class Ui {
      * @param tasks     the list of tasks containing the given keyword
      * @param keyword   the keyword to search for
      */
-    public String getSearchTasks(List<Task> tasks, String keyword) {
+    public List<String> getSearchTasks(List<Task> tasks, String keyword) {
         if (tasks.isEmpty()) {
-            return wrap(tab("No tasks with keyword: " + keyword));
+            return List.of(wrap(tab("No tasks with keyword: " + keyword)));
         }
 
         StringBuilder sb = new StringBuilder(tab("Matching tasks:\n"));
@@ -126,7 +126,7 @@ public class Ui {
         for (Task t : tasks) {
             sb.append(tab(i++ + ". " + t)).append("\n");
         }
-        return wrap(sb.toString());
+        return List.of(wrap(sb.toString()));
     }
 
 
@@ -136,10 +136,10 @@ public class Ui {
      * @param t          the task that was added
      * @param totalTasks the total number of tasks after adding
      */
-    public String getTaskAdded(Task t, int totalTasks) {
-        return wrap(tab("New task received. I've added this task:")
+    public List<String> getTaskAdded(Task t, int totalTasks) {
+        return List.of(wrap(tab("New task received. I've added this task:")
                 + "\n" + tab(t.toString())
-                + "\n" + tab("Now you have " + totalTasks + " tasks in the list."));
+                + "\n" + tab("Now you have " + totalTasks + " tasks in the list.")));
     }
 
     /**
@@ -148,10 +148,10 @@ public class Ui {
      * @param t          the task that was deleted
      * @param totalTasks the total number of tasks remaining
      */
-    public String getTaskDeleted(Task t, int totalTasks) {
-        return wrap(tab("Noted. I've removed this task:")
+    public List<String> getTaskDeleted(Task t, int totalTasks) {
+        return List.of(wrap(tab("Noted. I've removed this task:")
                 + "\n" + tab(t.toString())
-                + "\n" + tab("Now you have " + totalTasks + " tasks in the list."));
+                + "\n" + tab("Now you have " + totalTasks + " tasks in the list.")));
     }
 
     /**
@@ -160,11 +160,29 @@ public class Ui {
      * @param task the task being marked
      * @param isDone     true if the task is marked as done, false otherwise
      */
-    public String getTaskMarked(Task task, boolean isDone) {
+    public List<String> getTaskMarked(Task task, boolean isDone) {
         String msg = isDone
                 ? "Nice! I've marked this task as done:"
                 : "OK, I've marked this task as not done yet:";
-        return wrap(tab(msg) + "\n" + tab(task.toString()));
+        return List.of(wrap(tab(msg) + "\n" + tab(task.toString())));
+    }
+
+    /**
+     * Returns a list of messages to curse at the user.
+     *
+     * @param content   the message being sent to Agnes.
+     * @return          the list of curse messages to the user.
+     */
+    public List<String> getKnsResponse(String content) {
+        String line1 = wrap(tab("LEE YI HENG you dare to cise at me!"));
+        String line2 = wrap(tab("CIRSE"));
+        String line3 = wrap(tab("CRUISE"));
+        String line4 = wrap(tab("CURSE"));
+        String line5 = wrap(tab("KNS..."));
+
+        return List.of(
+                line1, line2, line3, line4, line5
+        );
     }
 
 }

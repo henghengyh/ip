@@ -1,5 +1,7 @@
 package agnes;
 
+import java.util.List;
+
 import agnes.parser.Parser;
 import agnes.storage.Storage;
 import agnes.task.TaskList;
@@ -26,7 +28,7 @@ public class Agnes {
         parser = new Parser(tasks, storage, ui);
     }
 
-    public String getResponse(String input) {
+    public List<String> getResponse(String input) {
         return parser.parse(input);
     }
 }

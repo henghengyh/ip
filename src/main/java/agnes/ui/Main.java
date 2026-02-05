@@ -23,11 +23,17 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
+            setWindowDimensions(stage);
             fxmlLoader.<MainWindow>getController().setAgnes(agnes);  // inject the Agnes instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setWindowDimensions(Stage stage) {
+        stage.setMinHeight(320);
+        stage.setMinWidth(320);
     }
 }
 

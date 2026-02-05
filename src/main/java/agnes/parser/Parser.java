@@ -54,7 +54,7 @@ public class Parser {
      *
      * @return          The message to be shown to user.
      */
-    public String parse(String request) {
+    public List<String> parse(String request) {
         try {
             String keyword = request.split(" ")[0];
             Command command = Command.from(keyword);
@@ -75,6 +75,8 @@ public class Parser {
                 return handleDelete(request);
             case FIND:
                 return handleFind(request);
+            case KNS:
+                return handleKns(request);
             default:
                 return handleCommands(request);
             }
@@ -94,7 +96,7 @@ public class Parser {
      * @throws InvalidCommandException      If the command is not recognised.
      * @return          The message to be shown to user.
      */
-    public String handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
+    public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
         Command cmd = Command.from(action);
         Task t;
@@ -165,7 +167,7 @@ public class Parser {
      * @param t The {@code Task} to be added.
      * @return          The message to be shown to user.
      */
-    private String addTask(Task t) {
+    private List<String> addTask(Task t) {
         tasks.addTask(t);
         storage.save(tasks);
         return ui.getTaskAdded(t, tasks.size());
@@ -179,7 +181,7 @@ public class Parser {
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
      * @return          The message to be shown to user.
      */
-    private String handleMark(String request, boolean mark)
+    private List<String> handleMark(String request, boolean mark)
             throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
@@ -204,7 +206,7 @@ public class Parser {
      * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
      * @return          The message to be shown to user.
      */
-    public String handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+    public List<String> handleDelete(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String[] parts = request.split(" ");
         if (parts.length < 2) {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
@@ -223,7 +225,7 @@ public class Parser {
      * @param request   The full user input string containing the date.
      * @return          The message to be shown to user.
      */
-    private String handleOnDate(String request) {
+    private List<String> handleOnDate(String request) {
         LocalDate date = DateTimeUtil.parseDateTime(request.substring(3)).toLocalDate();
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
         return ui.getTasksOnDate(filteredTasks, date);
@@ -235,8 +237,19 @@ public class Parser {
      * @param request   The full user input string containing the keyword.
      * @return          The message to be shown to user.
      */
-    private String handleFind(String request) {
+    private List<String> handleFind(String request) {
         String content = request.substring(5);
         return ui.getSearchTasks(tasks.find(content), content);
+    }
+
+    /**
+     * Handles a curse word request.
+     *
+     * @param request   The full user input string containing the curse word.
+     * @return          The message to be shown to user.
+     */
+    private List<String> handleKns(String request) {
+        String content = request.substring(3).strip();
+        return ui.getKnsResponse(content);
     }
 }
