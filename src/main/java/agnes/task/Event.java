@@ -2,6 +2,7 @@ package agnes.task;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 import agnes.util.DateTimeUtil;
 
@@ -70,6 +71,40 @@ public class Event extends Task {
 
         return (date.equals(start) || date.isAfter(start))
                 && (date.equals(end) || date.isBefore(end));
+    }
+
+    /**
+     * Updates a field of an {@code Event}.
+     *
+     * @param field    The field to be updated.
+     * @param value    The value to be placed to the field.
+     * @throws IllegalArgumentException If the field or value is invalid.
+     */
+    @Override
+    public void update(String field, String value) throws IllegalArgumentException {
+        try {
+            switch (field.toLowerCase()) {
+            case "/description":
+                this.setMessage(value);
+                break;
+            case "/from":
+                this.from = DateTimeUtil.parseDateTime(value);
+                break;
+            case "/to":
+                this.to = DateTimeUtil.parseDateTime(value);
+                break;
+            default:
+                throw new IllegalArgumentException(
+                        "Unknown field for event: " + field
+                                + "Available fields: /description, /from, /to"
+                );
+            }
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(
+                    "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
+            );
+        }
+
     }
 }
 

@@ -65,7 +65,7 @@ public class Deadline extends Task {
     }
 
     /**
-     * Updates a field of a {@code Task}.
+     * Updates a field of a {@code Deadline}.
      *
      * @param field    The field to be updated.
      * @param value    The value to be placed to the field.
