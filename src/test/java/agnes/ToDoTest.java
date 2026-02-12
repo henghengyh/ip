@@ -21,7 +21,7 @@ public class ToDoTest {
     @Test
     public void markTest() {
         ToDo t = new ToDo("");
-        t.mark();
+        t.setMarked();
 
         String expected = "X";
         String output = t.getStatusIcon();

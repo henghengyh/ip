@@ -25,12 +25,12 @@ public class Task {
     }
 
     /** Marks a task as complete. */
-    public void mark() {
+    public void setMarked() {
         this.isComplete = true;
     }
 
     /** Marks a task as incomplete. */
-    public void unmark() {
+    public void setUnmarked() {
         this.isComplete = false;
     }
 
@@ -49,7 +49,7 @@ public class Task {
      * @return "X" if the task is complete, otherwise a space character.
      */
     public String getStatusIcon() {
-        return (isComplete ? "X" : " "); // mark done agnes.task with X
+        return (isComplete ? "X" : " "); // setMarked done agnes.task with X
     }
 
     @Override

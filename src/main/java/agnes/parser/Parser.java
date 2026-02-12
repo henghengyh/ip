@@ -174,7 +174,7 @@ public class Parser {
     }
 
     /**
-     * Handles any request to mark a {@code Task}.
+     * Handles any request to setMarked a {@code Task}.
      *
      * @param request   The full user input string.
      * @return          The list of messages to be shown to user.
@@ -190,9 +190,9 @@ public class Parser {
         int taskNo = tasks.checkTaskNumber(parts[1]);
         Task task = tasks.get(taskNo - 1);
         if (mark) {
-            task.mark();
+            task.setMarked();
         } else {
-            task.unmark();
+            task.setUnmarked();
         }
         storage.save(tasks);
         return ui.getTaskMarked(task, mark);
