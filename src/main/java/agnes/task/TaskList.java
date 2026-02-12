@@ -124,7 +124,7 @@ public class TaskList {
      * @throws TaskIndexOutOfBoundsException if the task number is less than 1 or greater than the number of tasks
      */
     public Task updateTask(String index, String field, String value) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
-        Task task = this.tasks.get(checkTaskNumber(index));
+        Task task = this.tasks.get(checkTaskNumber(index) - 1);dead
         task.update(field, value);
         return task;
     }

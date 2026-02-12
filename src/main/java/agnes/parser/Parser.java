@@ -293,9 +293,9 @@ public class Parser {
     private List<String> handleUpdate(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
         String content = request.substring(UPDATE_LENGTH).strip();
         String index = content.substring(0, content.indexOf(" ")).strip();
-        String remaining = content.substring(content.indexOf(" ")).strip();
-        String field = remaining.substring(0, content.indexOf(" ")).strip();
-        String value = remaining.substring(content.indexOf(" ")).strip();
+        String remaining = content.substring(content.indexOf(" ")).strip();q
+        String field = remaining.substring(0, remaining.indexOf(" ")).strip();
+        String value = remaining.substring(remaining.indexOf(" ")).strip();
         Task t = this.tasks.updateTask(index, field, value);
 
         return ui.getTaskUpdated(t);
