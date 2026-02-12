@@ -9,7 +9,7 @@ import java.time.LocalDate;
  * a basic text. Specific task types (e.g., deadlines or events) may
  * extend this class to include specific behavior.
  */
-public class Task {
+public abstract class Task {
     private final String message;
     private boolean isComplete;
 
@@ -82,4 +82,13 @@ public class Task {
     public boolean fallsOnDate(LocalDate date) {
         return false;
     }
+
+    /**
+     * Updates a field of the task with the specified new value.
+     *
+     * @param field The field to update (e.g., "description", "by", "from", "to")
+     * @param value The new value for the field
+     * @throws IllegalArgumentException if the field doesn't exist or value is invalid
+     */
+    public abstract void update(String field, String value);
 }
