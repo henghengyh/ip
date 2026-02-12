@@ -33,6 +33,7 @@ public class Parser {
     private static final int ON_CMD_LENGTH = 3;
     private static final int FIND_CMD_LENGTH = 5;
     private static final int KNS_CMD_LENGTH = 3;
+    private static final int UPDATE_LENGTH = 7;
 
     private final TaskList tasks;
     private final Storage storage;
@@ -83,6 +84,8 @@ public class Parser {
                 return handleDelete(request);
             case FIND:
                 return handleFind(request);
+            case UPDATE:
+                return handleUpdate(request);
             case KNS:
                 return handleKns(request);
             default:
@@ -281,5 +284,21 @@ public class Parser {
         return ui.getKnsResponse(content);
     }
 
-    private
+    /**
+     * Handles an update request.
+     *
+     * @param request   The full user input string containing the field to be updated and value to input.
+     * @return          The message to be shown to user.
+     */
+    private List<String> handleUpdate(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+        String content = request.substring(UPDATE_LENGTH).strip();
+        String index = content.substring(0, content.indexOf(" ")).strip();
+        String remaining = content.substring(content.indexOf(" ")).strip();
+        String field = remaining.substring(0, content.indexOf(" ")).strip();
+        String value = remaining.substring(content.indexOf(" ")).strip();
+        this.tasks.updateTask(index, field, value);
+
+        return ui.getTaskUpdated(task);
+    }
+
 }
