@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * extend this class to include specific behavior.
  */
 public abstract class Task {
-    private final String message;
+    private String message;
     private boolean isComplete;
 
     /**
@@ -41,6 +41,15 @@ public abstract class Task {
      */
     public String getMessage() {
         return this.message;
+    }
+
+    /**
+     * Updates the description of the {@code Task}.
+     *
+     * @param newMessage    The new message to be assigned as the description.
+     */
+    public void setMessage(String newMessage) {
+        this.message = newMessage;
     }
 
     /**

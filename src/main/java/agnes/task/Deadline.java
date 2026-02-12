@@ -3,6 +3,7 @@ package agnes.task;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import agnes.util.DateTimeUtil;
 
@@ -61,5 +62,36 @@ public class Deadline extends Task {
     @Override
     public boolean fallsOnDate(LocalDate date) {
         return this.by.toLocalDate().equals(date);
+    }
+
+    /**
+     * Updates a field of a {@code Task}.
+     *
+     * @param field    The field to be updated.
+     * @param value    The value to be placed to the field.
+     * @throws IllegalArgumentException If the field or value is invalid.
+     */
+    @Override
+    public void update(String field, String value) throws IllegalArgumentException {
+        try {
+            switch (field.toLowerCase()) {
+            case "/description":
+                this.setMessage(value);
+                break;
+            case "/by":
+                this.by = DateTimeUtil.parseDateTime(value);
+                break;
+            default:
+                throw new IllegalArgumentException(
+                        "Unknown field for deadline: " + field
+                        + "Available fields: /description, /by"
+                );
+            }
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(
+                    "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
+            );
+        }
+
     }
 }
