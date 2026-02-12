@@ -32,6 +32,13 @@ public class Parser {
     private final Storage storage;
     private final Ui ui;
 
+    private static final int TODO_CMD_LENGTH = 5;
+    private static final int DEADLINE_CMD_LENGTH = 8;
+    private static final int EVENT_CMD_LENGTH = 5;
+    private static final int ON_CMD_LENGTH = 3;
+    private static final int FIND_CMD_LENGTH = 5;
+    private static final int KNS_CMD_LENGTH = 3;
+
     /**
      * Creates a {@code Parser} with the required dependencies.
      *
@@ -103,13 +110,13 @@ public class Parser {
         String content;
         switch (cmd) {
         case TODO:
-            if (request.length() <= 5) {
+            if (request.length() <= TODO_CMD_LENGTH) {
                 throw new InvalidDescriptionException(
                         "Hellos, tell me what description you want!"
                 );
             }
 
-            content = request.substring(5);
+            content = request.substring(TODO_CMD_LENGTH);
             t = new ToDo(content.trim());
             return addTask(t);
         case DEADLINE:
@@ -119,7 +126,7 @@ public class Parser {
                 );
             }
 
-            content = request.substring(8);
+            content = request.substring(DEADLINE_CMD_LENGTH);
             String[] deadlineInfo = content.split(" /by ");
             String datePart = deadlineInfo[1].trim();
 
@@ -140,7 +147,7 @@ public class Parser {
                 );
             }
 
-            content = request.substring(5);
+            content = request.substring(EVENT_CMD_LENGTH);
             String[] eventInfo = content.split(" /from ");
             String[] fromToInfo = eventInfo[1].split(" /to ");
             String fromPart = fromToInfo[0].trim();
@@ -226,7 +233,7 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleOnDate(String request) {
-        LocalDate date = DateTimeUtil.parseDateTime(request.substring(3)).toLocalDate();
+        LocalDate date = DateTimeUtil.parseDateTime(request.substring(ON_CMD_LENGTH)).toLocalDate();
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
         return ui.getTasksOnDate(filteredTasks, date);
     }
@@ -238,7 +245,7 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleFind(String request) {
-        String content = request.substring(5);
+        String content = request.substring(FIND_CMD_LENGTH);
         return ui.getSearchTasks(tasks.find(content), content);
     }
 
@@ -249,7 +256,7 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleKns(String request) {
-        String content = request.substring(3).strip();
+        String content = request.substring(KNS_CMD_LENGTH).strip();
         return ui.getKnsResponse(content);
     }
 }
