@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import agnes.Agnes;
 import agnes.task.Task;
@@ -72,13 +73,12 @@ public class Ui {
             return List.of(wrap("No tasks in your list!"));
         }
 
-        List<String> lines = new java.util.ArrayList<>();
-        lines.add("Here are your tasks:");
+        List<String> lines =
+                java.util.stream.IntStream.range(0, tasks.size())
+                        .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
+                        .collect(Collectors.toList());
 
-        for (int i = 1; i <= tasks.size(); i++) {
-            lines.add(i + ". " + tasks.get(i - 1));
-        }
-
+        lines.add(0, "Here are your tasks:");
         return List.of(wrap(lines.toArray(new String[0])));
     }
 
@@ -105,13 +105,10 @@ public class Ui {
             return List.of(wrap("No tasks found on " + date));
         }
 
-        List<String> lines = new java.util.ArrayList<>();
-        lines.add("Tasks on " + date + ":");
-
-        int i = 1;
-        for (Task t : tasks) {
-            lines.add(i++ + ". " + t);
-        }
+        List<String> lines = java.util.stream.IntStream.range(0, tasks.size())
+                .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
+                .collect(Collectors.toList());
+        lines.add(0, "Tasks on " + date + ":");
 
         return List.of(wrap(lines.toArray(new String[0])));
     }
@@ -130,13 +127,10 @@ public class Ui {
             return List.of(wrap("No tasks with keyword: " + keyword));
         }
 
-        List<String> lines = new java.util.ArrayList<>();
-        lines.add("Matching tasks:");
-
-        int i = 1;
-        for (Task t : tasks) {
-            lines.add(i++ + ". " + t);
-        }
+        List<String> lines = java.util.stream.IntStream.range(0, tasks.size())
+                .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
+                .collect(Collectors.toList());
+        lines.add(0, "Matching tasks:");
 
         return List.of(wrap(lines.toArray(new String[0])));
     }
@@ -193,15 +187,15 @@ public class Ui {
      * @return          the list of curse messages to the user.
      */
     public List<String> getKnsResponse(String content) {
-        String line1 = wrap("LEE YI HENG you dare to cise at me!");
-        String line2 = wrap("CIRSE");
-        String line3 = wrap("CRUISE");
-        String line4 = wrap("CURSE");
-        String line5 = wrap("KNS...");
+        String line1 = "LEE YI HENG you dare to cise at me!";
+        String line2 = "CIRSE";
+        String line3 = "CRUISE";
+        String line4 = "CURSE";
+        String line5 = "KNS...";
 
-        return List.of(
+        return Stream.of(
                 line1, line2, line3, line4, line5
-        );
+        ).map(this::wrap).toList();
     }
 
 }
