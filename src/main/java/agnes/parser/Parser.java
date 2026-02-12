@@ -106,10 +106,14 @@ public class Parser {
     public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         Command cmd = Command.from(request.split(" ")[0]);
         switch (cmd) {
-        case TODO: return handleToDo(request);
-        case DEADLINE: return handleDeadline(request);
-        case EVENT: return handleEvent(request);
-        default: throw new InvalidCommandException("I don't understand what you're saying...");
+        case TODO:
+            return handleToDo(request);
+        case DEADLINE:
+            return handleDeadline(request);
+        case EVENT:
+            return handleEvent(request);
+        default:
+            throw new InvalidCommandException("I don't understand what you're saying...");
         }
     }
 
