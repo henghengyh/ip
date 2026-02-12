@@ -2,7 +2,6 @@ package agnes.parser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -28,10 +27,6 @@ import agnes.util.DateTimeUtil;
  * saving and displaying results.
  */
 public class Parser {
-    private final TaskList tasks;
-    private final Storage storage;
-    private final Ui ui;
-
     private static final int TODO_CMD_LENGTH = 5;
     private static final int DEADLINE_CMD_LENGTH = 8;
     private static final int EVENT_CMD_LENGTH = 5;
@@ -39,6 +34,9 @@ public class Parser {
     private static final int FIND_CMD_LENGTH = 5;
     private static final int KNS_CMD_LENGTH = 3;
 
+    private final TaskList tasks;
+    private final Storage storage;
+    private final Ui ui;
     /**
      * Creates a {@code Parser} with the required dependencies.
      *
@@ -62,8 +60,11 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     public List<String> parse(String request) {
+        assert request != null : "User request should never be null";
+        assert !request.isBlank() : "User request should not be blank";
         try {
             String keyword = request.split(" ")[0];
+            assert !keyword.isBlank() : "Command keyword should exist";
             Command command = Command.from(keyword);
             switch (command) {
             case HI:
@@ -104,7 +105,10 @@ public class Parser {
      * @throws InvalidCommandException      If the command is not recognised.
      */
     public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
-        Command cmd = Command.from(request.split(" ")[0]);
+        String action = request.split(" ")[0];
+        Command cmd = Command.from(action);
+        assert cmd == Command.TODO || cmd == Command.DEADLINE || cmd == Command.EVENT
+                : "handleCommands should only process task-creation commands";
         switch (cmd) {
         case TODO:
             return handleToDo(request);
@@ -185,7 +189,10 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> addTask(Task t) {
+        assert t != null : "Task being added should never be null";
+        int oldSize = tasks.size();
         tasks.addTask(t);
+        assert tasks.size() == oldSize + 1 : "TaskList size should increase after adding";
         storage.save(tasks);
         return ui.getTaskAdded(t, tasks.size());
     }
@@ -205,6 +212,7 @@ public class Parser {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
         }
         int taskNo = tasks.checkTaskNumber(parts[1]);
+        assert taskNo > 0 && taskNo <= tasks.size() : "Task number must be within list bounds";
         Task task = tasks.get(taskNo - 1);
         if (mark) {
             task.setMarked();
@@ -230,6 +238,7 @@ public class Parser {
         }
 
         int taskNo = tasks.checkTaskNumber(parts[1]);
+        assert taskNo > 0 && taskNo <= tasks.size() : "Task number must be valid before deletion";
         Task removed = tasks.removeTask(taskNo - 1);
         storage.save(tasks);
         return ui.getTaskDeleted(removed, tasks.size());
@@ -244,6 +253,7 @@ public class Parser {
      */
     private List<String> handleOnDate(String request) {
         LocalDate date = DateTimeUtil.parseDateTime(request.substring(ON_CMD_LENGTH)).toLocalDate();
+        assert date != null : "Parsed date should not be null";
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
         return ui.getTasksOnDate(filteredTasks, date);
     }
@@ -256,6 +266,7 @@ public class Parser {
      */
     private List<String> handleFind(String request) {
         String content = request.substring(FIND_CMD_LENGTH);
+        assert !content.isBlank() : "Find keyword should not be blank";
         return ui.getSearchTasks(tasks.find(content), content);
     }
 
