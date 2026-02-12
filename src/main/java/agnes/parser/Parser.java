@@ -296,9 +296,9 @@ public class Parser {
         String remaining = content.substring(content.indexOf(" ")).strip();
         String field = remaining.substring(0, content.indexOf(" ")).strip();
         String value = remaining.substring(content.indexOf(" ")).strip();
-        this.tasks.updateTask(index, field, value);
+        Task t = this.tasks.updateTask(index, field, value);
 
-        return ui.getTaskUpdated(task);
+        return ui.getTaskUpdated(t);
     }
 
 }

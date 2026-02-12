@@ -198,4 +198,18 @@ public class Ui {
         ).map(this::wrap).toList();
     }
 
+    /**
+     * Returns a message indicating that a task has been updated.
+     *
+     * @param t         the task that has been updated
+     * @return          the list of display messages to the user.
+     */
+    public List<String> getTaskUpdated(Task t) {
+        assert t != null : "Deleted task should not be null";
+        return List.of(wrap(
+                "Existing task updated. Here's the updated task:",
+                t.toString()
+        ));
+    }
+
 }
