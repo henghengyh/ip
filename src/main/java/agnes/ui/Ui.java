@@ -27,18 +27,8 @@ public class Ui {
      * @return the message wrapped with LINE.
      */
     private String wrap(String... lines) {
-        return Arrays.stream(lines)
-                .map(this::tab)
-                .collect(Collectors.joining("\n"));
-    }
-
-    /**
-     * Inserts a tab before the message.
-     * @param msg the message to be processed.
-     * @return the message tabbed.
-     */
-    private String tab(String msg) {
-        return msg;
+        assert lines != null : "Lines passed to wrap() should not be null";
+        return String.join("\n", lines);
     }
 
     /**
@@ -69,6 +59,7 @@ public class Ui {
      * @param tasks the list of tasks on the given date
      */
     public List<String> getTasks(TaskList tasks) {
+        assert tasks != null : "TaskList should not be null when displaying tasks";
         if (tasks.size() == 0) {
             return List.of(wrap("No tasks in your list!"));
         }
@@ -101,6 +92,8 @@ public class Ui {
      * @param date  the date for which tasks are required
      */
     public List<String> getTasksOnDate(List<Task> tasks, LocalDate date) {
+        assert tasks != null : "Task list for date display should not be null";
+        assert date != null : "Date for filtering should not be null";
         if (tasks.isEmpty()) {
             return List.of(wrap("No tasks found on " + date));
         }
@@ -123,6 +116,8 @@ public class Ui {
      * @param keyword   the keyword to search for
      */
     public List<String> getSearchTasks(List<Task> tasks, String keyword) {
+        assert tasks != null : "Search results list should not be null";
+        assert keyword != null : "Search keyword should not be null";
         if (tasks.isEmpty()) {
             return List.of(wrap("No tasks with keyword: " + keyword));
         }
@@ -143,6 +138,8 @@ public class Ui {
      * @param totalTasks the total number of tasks after adding
      */
     public List<String> getTaskAdded(Task t, int totalTasks) {
+        assert t != null : "Added task should not be null";
+        assert totalTasks >= 0 : "Total task count cannot be negative";
         return List.of(wrap(
                 "New task received. I've added this task:",
                 t.toString(),
@@ -157,6 +154,8 @@ public class Ui {
      * @param totalTasks the total number of tasks remaining
      */
     public List<String> getTaskDeleted(Task t, int totalTasks) {
+        assert t != null : "Deleted task should not be null";
+        assert totalTasks >= 0 : "Total task count cannot be negative";
         return List.of(wrap(
                 "Noted. I've removed this task:",
                 t.toString(),
@@ -171,6 +170,7 @@ public class Ui {
      * @param isDone     true if the task is marked as done, false otherwise
      */
     public List<String> getTaskMarked(Task task, boolean isDone) {
+        assert task != null : "Marked task should not be null";
         String msg = isDone
                 ? "Nice! I've marked this task as done:"
                 : "OK, I've marked this task as not done yet:";
