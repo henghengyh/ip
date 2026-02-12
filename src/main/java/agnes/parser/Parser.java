@@ -104,68 +104,74 @@ public class Parser {
      * @throws InvalidCommandException      If the command is not recognised.
      */
     public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
-        String action = request.split(" ")[0];
-        Command cmd = Command.from(action);
-        Task t;
-        String content;
+        Command cmd = Command.from(request.split(" ")[0]);
         switch (cmd) {
-        case TODO:
-            if (request.length() <= TODO_CMD_LENGTH) {
-                throw new InvalidDescriptionException(
-                        "Hellos, tell me what description you want!"
-                );
-            }
+        case TODO: return handleToDo(request);
+        case DEADLINE: return handleDeadline(request);
+        case EVENT: return handleEvent(request);
+        default: throw new InvalidCommandException("I don't understand what you're saying...");
+        }
+    }
 
-            content = request.substring(TODO_CMD_LENGTH);
-            t = new ToDo(content.trim());
+    /**
+     * Handles creation and addition of a ToDo task.
+     *
+     * @param request The full user input string starting with the "todo" keyword.
+     * @return        The list of messages to be shown to user.
+     * @throws InvalidDescriptionException If the task description or format is invalid.
+     */
+    private List<String> handleToDo(String request) throws InvalidDescriptionException {
+        if (request.length() <= TODO_CMD_LENGTH) {
+            throw new InvalidDescriptionException("Tell me what description you want!");
+        }
+        String content = request.substring(TODO_CMD_LENGTH).trim();
+        Task t = new ToDo(content);
+        return addTask(t);
+    }
+
+    /**
+     * Handles creation and addition of a Deadline task.
+     *
+     * @param request The full user input string starting with the "deadline" keyword.
+     * @return        The list of messages to be shown to user.
+     * @throws InvalidDescriptionException If the task description or format is invalid.
+     */
+    private List<String> handleDeadline(String request) throws InvalidDescriptionException {
+        if (!request.contains(" /by ")) {
+            throw new InvalidDescriptionException("Specify your deadline using '/by'...");
+        }
+        String content = request.substring(DEADLINE_CMD_LENGTH);
+        String[] deadlineInfo = content.split(" /by ");
+        try {
+            LocalDateTime by = DateTimeUtil.parseDateTime(deadlineInfo[1].trim());
+            Task t = new Deadline(deadlineInfo[0].trim(), by);
             return addTask(t);
-        case DEADLINE:
-            if (!request.contains(" /by ")) {
-                throw new InvalidDescriptionException(
-                        "Specify your deadline using '/by'..."
-                );
-            }
+        } catch (DateTimeParseException e) {
+            throw new InvalidDescriptionException("Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm");
+        }
+    }
 
-            content = request.substring(DEADLINE_CMD_LENGTH);
-            String[] deadlineInfo = content.split(" /by ");
-            String datePart = deadlineInfo[1].trim();
-
-            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-            try {
-                LocalDateTime by = DateTimeUtil.parseDateTime(datePart);
-                t = new Deadline(deadlineInfo[0].trim(), by);
-                return addTask(t);
-            } catch (DateTimeParseException e) {
-                throw new InvalidDescriptionException(
-                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
-                );
-            }
-        case EVENT:
-            if (!request.contains(" /from ") || !request.contains(" /to ")) {
-                throw new InvalidDescriptionException(
-                        "Specify your event duration using '/from' and '/to'..."
-                );
-            }
-
-            content = request.substring(EVENT_CMD_LENGTH);
-            String[] eventInfo = content.split(" /from ");
-            String[] fromToInfo = eventInfo[1].split(" /to ");
-            String fromPart = fromToInfo[0].trim();
-            String toPart = fromToInfo[1].trim();
-
-            try {
-                LocalDateTime from = DateTimeUtil.parseDateTime(fromPart);
-                LocalDateTime to = DateTimeUtil.parseDateTime(toPart);
-
-                t = new Event(eventInfo[0].trim(), from, to);
-                return addTask(t);
-            } catch (DateTimeParseException e) {
-                throw new InvalidDescriptionException(
-                        "Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm"
-                );
-            }
-        default:
-            throw new InvalidCommandException("I don't understand what you're saying... TYPE PROPERLY LEH");
+    /**
+     * Handles creation and addition of an Event task.
+     *
+     * @param request The full user input string starting with the "event" keyword.
+     * @return        The list of messages to be shown to user.
+     * @throws InvalidDescriptionException If the task description or format is invalid.
+     */
+    private List<String> handleEvent(String request) throws InvalidDescriptionException {
+        if (!request.contains(" /from ") || !request.contains(" /to ")) {
+            throw new InvalidDescriptionException("Specify event duration using '/from' and '/to'...");
+        }
+        String content = request.substring(EVENT_CMD_LENGTH);
+        String[] eventInfo = content.split(" /from ");
+        String[] fromToInfo = eventInfo[1].split(" /to ");
+        try {
+            LocalDateTime from = DateTimeUtil.parseDateTime(fromToInfo[0].trim());
+            LocalDateTime to = DateTimeUtil.parseDateTime(fromToInfo[1].trim());
+            Task t = new Event(eventInfo[0].trim(), from, to);
+            return addTask(t);
+        } catch (DateTimeParseException e) {
+            throw new InvalidDescriptionException("Date format should be yyyy-MM-dd or yyyy-MM-dd HHmm");
         }
     }
 
