@@ -105,7 +105,11 @@ public class TaskList {
             throw new InvalidTaskNumberException("Can count 123 or not... Give me a proper number!");
         }
 
-        if (taskNo < 1 || taskNo > tasks.size()) {
+        boolean isAtLeast1 = taskNo >= 1;
+        boolean isNotExceedingTaskSize = taskNo <= tasks.size();
+        boolean isNotValidTaskNo = !(isAtLeast1 && isNotExceedingTaskSize);
+
+        if (isNotValidTaskNo) {
             throw new TaskIndexOutOfBoundsException(
                     "Your task number is out of my range! "
                             + "Try the command 'list' to know how many tasks you have :))"
