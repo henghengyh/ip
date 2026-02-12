@@ -55,8 +55,11 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     public List<String> parse(String request) {
+        assert request != null : "User request should never be null";
+        assert !request.isBlank() : "User request should not be blank";
         try {
             String keyword = request.split(" ")[0];
+            assert !keyword.isBlank() : "Command keyword should exist";
             Command command = Command.from(keyword);
             switch (command) {
             case HI:
@@ -99,6 +102,8 @@ public class Parser {
     public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
         Command cmd = Command.from(action);
+        assert cmd == Command.TODO || cmd == Command.DEADLINE || cmd == Command.EVENT
+                : "handleCommands should only process task-creation commands";
         Task t;
         String content;
         switch (cmd) {
@@ -121,6 +126,7 @@ public class Parser {
 
             content = request.substring(8);
             String[] deadlineInfo = content.split(" /by ");
+            assert deadlineInfo.length == 2 : "Deadline must contain description and /by date";
             String datePart = deadlineInfo[1].trim();
 
             DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
@@ -142,7 +148,9 @@ public class Parser {
 
             content = request.substring(5);
             String[] eventInfo = content.split(" /from ");
+            assert eventInfo.length == 2 : "Event must contain description and /from";
             String[] fromToInfo = eventInfo[1].split(" /to ");
+            assert fromToInfo.length == 2 : "Event must contain both /from and /to";
             String fromPart = fromToInfo[0].trim();
             String toPart = fromToInfo[1].trim();
 
@@ -168,7 +176,10 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> addTask(Task t) {
+        assert t != null : "Task being added should never be null";
+        int oldSize = tasks.size();
         tasks.addTask(t);
+        assert tasks.size() == oldSize + 1 : "TaskList size should increase after adding";
         storage.save(tasks);
         return ui.getTaskAdded(t, tasks.size());
     }
@@ -188,6 +199,7 @@ public class Parser {
             throw new InvalidTaskNumberException("Don't play play... Give me a task number!");
         }
         int taskNo = tasks.checkTaskNumber(parts[1]);
+        assert taskNo > 0 && taskNo <= tasks.size() : "Task number must be within list bounds";
         Task task = tasks.get(taskNo - 1);
         if (mark) {
             task.mark();
@@ -213,6 +225,7 @@ public class Parser {
         }
 
         int taskNo = tasks.checkTaskNumber(parts[1]);
+        assert taskNo > 0 && taskNo <= tasks.size() : "Task number must be valid before deletion";
         Task removed = tasks.removeTask(taskNo - 1);
         storage.save(tasks);
         return ui.getTaskDeleted(removed, tasks.size());
@@ -227,6 +240,7 @@ public class Parser {
      */
     private List<String> handleOnDate(String request) {
         LocalDate date = DateTimeUtil.parseDateTime(request.substring(3)).toLocalDate();
+        assert date != null : "Parsed date should not be null";
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
         return ui.getTasksOnDate(filteredTasks, date);
     }
@@ -239,6 +253,7 @@ public class Parser {
      */
     private List<String> handleFind(String request) {
         String content = request.substring(5);
+        assert !content.isBlank() : "Find keyword should not be blank";
         return ui.getSearchTasks(tasks.find(content), content);
     }
 
