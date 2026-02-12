@@ -113,6 +113,21 @@ public class TaskList {
         }
         return taskNo;
     }
+
+    /**
+     * Updates a task at the specified index.
+     *
+     * @param index the index of the task to update (0-based)
+     * @param field the field to update
+     * @param value the new value
+     * @throws InvalidTaskNumberException if the string is not a valid integer
+     * @throws TaskIndexOutOfBoundsException if the task number is less than 1 or greater than the number of tasks
+     */
+    public void updateTask(String index, String field, String value) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+        Task task = this.tasks.get(checkTaskNumber(index));
+        task.update(field, value);
+    }
+
     /**
      * Returns a list of tasks that contains a given keyword.
      *

@@ -280,4 +280,6 @@ public class Parser {
         String content = request.substring(KNS_CMD_LENGTH).strip();
         return ui.getKnsResponse(content);
     }
+
+    private
 }
