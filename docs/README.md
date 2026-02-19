@@ -1,8 +1,8 @@
-# Agnes - Your Lovely Task Assistant :DD :smile:
+# Agnes - Your Lovely Task Assistant :DD 
 
 ![Agnes Screenshot](Ui.png)
 
-Meet Agnes, your friendly task manager! Whether you're juggling deadlines, planning events, or just need to keep track of your endless to-dos, Agnes is here to help with a smile. :smile:
+Meet Agnes, your friendly task manager! Whether you're juggling deadlines, planning events, or just need to keep track of your endless to-dos, Agnes is here to help with a smile. 
 
 ---
 ## Getting Started
