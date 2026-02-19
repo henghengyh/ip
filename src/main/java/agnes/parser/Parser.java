@@ -40,7 +40,6 @@ public class Parser {
     private static final String EVENT_PREFIX = "event ";
     private static final String ON_PREFIX = "on ";
     private static final String FIND_PREFIX = "find ";
-    private static final String KNS_PREFIX = "kns ";
     private static final String UPDATE_PREFIX = "update ";
 
     // Delimiters
@@ -301,7 +300,9 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleKns(String request) {
-        String content = request.substring(KNS_PREFIX.length()).strip();
+        String content = "";
+        // Currently there is no need to parse the content as the response is fixed,
+        // but this allows for future expansion of the command.
         return ui.getKnsResponse(content);
     }
 
