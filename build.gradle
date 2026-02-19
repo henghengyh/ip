@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'checkstyle'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 repositories {
@@ -12,6 +13,8 @@ repositories {
 dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    implementation "org.openjfx:javafx-controls:17"
+    implementation "org.openjfx:javafx-fxml:17"
 }
 
 test {
@@ -29,7 +32,7 @@ test {
 }
 
 application {
-    mainClass.set("agnes.ui.Main")
+    mainClass.set("agnes.ui.Launcher")
 }
 
 shadowJar {
@@ -44,4 +47,9 @@ run{
 
 checkstyle {
     toolVersion = '11.0.0'
+}
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
