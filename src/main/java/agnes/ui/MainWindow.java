@@ -26,13 +26,25 @@ public class MainWindow extends AnchorPane {
 
     private Agnes agnes;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/yiheng.jpg"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/agnes.jpg"));
+    private Image userImage;
+    private Image dukeImage;
     private ImageView displayPicture;
 
     /** Initialises the Main Window to be displayed by creating objects and showing welcome message */
     @FXML
     public void initialize() {
+        try {
+            /** AI Recommended to use catch the error if the images are not present
+             *
+             * Missing Error Handling Image loading in MainWindow doesn't handle
+             * NullPointerException if images are missing.
+             */
+            userImage = new Image(this.getClass().getResourceAsStream("/images/yiheng.jpg"));
+            dukeImage = new Image(this.getClass().getResourceAsStream("/images/agnes.jpg"));
+        } catch (NullPointerException e) {
+            System.err.println("Error loading images: " + e.getMessage());
+        }
+
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
         Ui ui = new Ui();
         dialogContainer.getChildren().add(
