@@ -27,7 +27,7 @@ todo eat at PGP
 
 **Agnes will reply:**
 ```
-New task received. I've added this task:
+Okie Dokie! I've added this task:
   [T][ ] eat at PGP
 Now you have 1 tasks in the list.
 ```
@@ -49,7 +49,7 @@ deadline buy cake /by 2026-03-15
 
 **Agnes will reply:**
 ```
-New task received. I've added this task:
+Okie Dokie! I've added this task:
   [D][ ] buy cake (by: Mar 15 2026)
 Now you have 2 tasks in your list.
 ```
@@ -71,7 +71,7 @@ event birthday party /from 2026-03-20 1800 /to 2026-03-20 2200
 
 **Agnes will reply:**
 ```
-New task received. I've added this task:
+Okie Dokie! I've added this task:
   [E][ ] birthday party (from: Mar 20 2026 6:00 PM to: Mar 20 2026 10:00 PM)
 Now you have 3 tasks in your list.
 ```
@@ -87,7 +87,7 @@ list
 
 **Agnes will reply:**
 ```
-Here are your tasks:
+Here's everything you've got so far:
 1. [T][ ] eat at PGP
 2. [D][ ] buy cake (by: Mar 15 2026)
 3. [E][ ] birthday party (from: Mar 20 2026 6:00 PM to: Mar 20 2026 10:00 PM)
@@ -123,7 +123,7 @@ unmark 1
 
 **Agnes will reply:**
 ```
-OK, I've marked this task as not done yet:
+WTF... FINE..., I've marked this task as not done yet:
   [T][ ] eat at PGP
 ```
 
@@ -141,7 +141,7 @@ delete 2
 
 **Agnes will reply:**
 ```
-Noted. I've removed this task:
+Siao EH. I've removed this task:
   [D][ ] buy cake (by: Mar 15 2026)
 Now you have 2 tasks in your list.
 ```
@@ -160,7 +160,7 @@ find party
 
 **Agnes will reply:**
 ```
-Matching tasks:
+Here's what I found for "party":
 1. [E][ ] birthday party (from: Mar 20 2026 6:00 PM to: Mar 20 2026 10:00 PM)
 ```
 
@@ -182,7 +182,7 @@ on 2026-03-20
 
 **Agnes will reply:**
 ```
-Tasks on 2026-03-20:
+Here's what I found on 2026-03-20:
 1. [E][ ] birthday party (from: Mar 20 2026 6:00 PM to: Mar 20 2026 10:00 PM)
 ```
 
@@ -206,7 +206,7 @@ update 1 /description Agnes's birthday party
 
 **Agnes will reply:**
 ```
-Existing task updated. Here's the updated task:
+Haode. Here's the updated task:
 1. [E][ ] Agnes's birthday party (from: Mar 20 2026 6:00 PM to: Mar 20 2026 10:00 PM)
 ```
 

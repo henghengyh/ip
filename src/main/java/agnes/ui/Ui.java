@@ -68,7 +68,7 @@ public class Ui {
                         .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
                         .collect(Collectors.toList());
 
-        lines.add(0, "Here are your tasks:");
+        lines.add(0, "Here's everything you've got so far:");
         return List.of(wrap(lines.toArray(new String[0])));
     }
 
@@ -94,13 +94,13 @@ public class Ui {
         assert tasks != null : "Task list for date display should not be null";
         assert date != null : "Date for filtering should not be null";
         if (tasks.isEmpty()) {
-            return List.of(wrap("No tasks found on " + date));
+            return List.of(wrap("AIYOOOOOO SWEE HENG LAH No tasks found on " + date));
         }
 
         List<String> lines = java.util.stream.IntStream.range(0, tasks.size())
                 .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
                 .collect(Collectors.toList());
-        lines.add(0, "Tasks on " + date + ":");
+        lines.add(0, "Here's what I found on " + date + ":");
 
         return List.of(wrap(lines.toArray(new String[0])));
     }
@@ -124,7 +124,8 @@ public class Ui {
         List<String> lines = java.util.stream.IntStream.range(0, tasks.size())
                 .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
                 .collect(Collectors.toList());
-        lines.add(0, "Matching tasks:");
+        lines.add(0, "\n"
+                + "Here's what I found for \"+ keyword +\":");
 
         return List.of(wrap(lines.toArray(new String[0])));
     }
@@ -140,7 +141,7 @@ public class Ui {
         assert t != null : "Added task should not be null";
         assert totalTasks >= 0 : "Total task count cannot be negative";
         return List.of(wrap(
-                "New task received. I've added this task:",
+                "Okie Dokie! I've added this task:",
                 t.toString(),
                 "Now you have " + totalTasks + " tasks in the list."
         ));
@@ -156,7 +157,7 @@ public class Ui {
         assert t != null : "Deleted task should not be null";
         assert totalTasks >= 0 : "Total task count cannot be negative";
         return List.of(wrap(
-                "Noted. I've removed this task:",
+                "Siao EH. I've removed this task:",
                 t.toString(),
                 "Now you have " + totalTasks + " tasks in the list."
         ));
@@ -172,7 +173,7 @@ public class Ui {
         assert task != null : "Marked task should not be null";
         String msg = isDone
                 ? "Nice! I've marked this task as done:"
-                : "OK, I've marked this task as not done yet:";
+                : "WTF... FINE..., I've marked this task as not done yet:";
         return List.of(wrap(
                 msg,
                 task.toString()
@@ -206,7 +207,7 @@ public class Ui {
     public List<String> getTaskUpdated(Task t) {
         assert t != null : "Deleted task should not be null";
         return List.of(wrap(
-                "Existing task updated. Here's the updated task:",
+                "Haode. Here's the updated task:",
                 t.toString()
         ));
     }
