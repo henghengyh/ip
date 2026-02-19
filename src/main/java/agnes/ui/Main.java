@@ -23,7 +23,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-            stage.setTitle("Agnes - Yi Heng's self-designed chatbot <3");
+            stage.setTitle("Agnes");
 
             setWindowDimensions(stage);
             fxmlLoader.<MainWindow>getController().setAgnes(agnes); // inject the Agnes instance
