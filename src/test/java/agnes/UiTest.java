@@ -24,7 +24,7 @@ import agnes.ui.Ui;
  *
  * Looking at your current Ui.java, the old test methods
  * like printReply() and printTaskAdded() no longer exist.
- * They've been replaced with methods that return List<String>
+ * They've been replaced with methods that return a List of Strings
  * instead of printing directly.
  */
 public class UiTest {

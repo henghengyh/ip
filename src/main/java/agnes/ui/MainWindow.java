@@ -34,11 +34,11 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         try {
-            /** AI Recommended to use catch the error if the images are not present
-             *
-             * Missing Error Handling Image loading in MainWindow doesn't handle
-             * NullPointerException if images are missing.
-             */
+            // AI Recommended to use catch the error if the images are not present
+            //
+            //Missing Error Handling Image loading in MainWindow doesn't handle
+            //NullPointerException if images are missing.
+            //
             userImage = new Image(this.getClass().getResourceAsStream("/images/yiheng.jpg"));
             dukeImage = new Image(this.getClass().getResourceAsStream("/images/agnes.jpg"));
         } catch (NullPointerException e) {

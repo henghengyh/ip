@@ -27,12 +27,13 @@ import agnes.util.DateTimeUtil;
  * saving and displaying results.
  */
 public class Parser {
-    /** AI Recommended to not use Magic Number here, instead put
-     * in the prefix and .length the prefix/ delimitter each time it is
-     * used.
-     *
-     * Magic Numbers Command lengths are hardcoded constants that are error-prone.
-     */
+    // AI Recommended to not use Magic Number here, instead put
+    // in the prefix and .length the prefix/ delimitter each time it is
+    // used.
+    //
+    // Magic Numbers Command lengths are hardcoded constants that are error-prone.
+    //
+
     // Command prefixes
     private static final String TODO_PREFIX = "todo ";
     private static final String DEADLINE_PREFIX = "deadline ";
