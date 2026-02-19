@@ -100,8 +100,12 @@ public class Parser {
                 return handleUpdate(request);
             case KNS:
                 return handleKns(request);
-            default:
+            case TODO:
+            case DEADLINE:
+            case EVENT:
                 return handleCommands(request);
+            default:
+                throw new InvalidCommandException("I don't understand what you're saying...");
             }
         } catch (InvalidDescriptionException
                  | InvalidTaskNumberException
@@ -122,8 +126,8 @@ public class Parser {
     public List<String> handleCommands(String request) throws InvalidDescriptionException, InvalidCommandException {
         String action = request.split(" ")[0];
         Command cmd = Command.from(action);
-        assert cmd == Command.TODO || cmd == Command.DEADLINE || cmd == Command.EVENT
-                : "handleCommands should only process task-creation commands";
+        // AI Recommended to remove this assertion and relocate the logic of
+        // checking if a command is task creation
         switch (cmd) {
         case TODO:
             return handleToDo(request);
