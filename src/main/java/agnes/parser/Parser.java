@@ -27,13 +27,25 @@ import agnes.util.DateTimeUtil;
  * saving and displaying results.
  */
 public class Parser {
-    private static final int TODO_CMD_LENGTH = 5;
-    private static final int DEADLINE_CMD_LENGTH = 8;
-    private static final int EVENT_CMD_LENGTH = 5;
-    private static final int ON_CMD_LENGTH = 3;
-    private static final int FIND_CMD_LENGTH = 5;
-    private static final int KNS_CMD_LENGTH = 3;
-    private static final int UPDATE_LENGTH = 7;
+    /** AI Recommended to not use Magic Number here, instead put
+     * in the prefix and .length the prefix/ delimitter each time it is
+     * used.
+     *
+     * Magic Numbers Command lengths are hardcoded constants that are error-prone.
+     */
+    // Command prefixes
+    private static final String TODO_PREFIX = "todo ";
+    private static final String DEADLINE_PREFIX = "deadline ";
+    private static final String EVENT_PREFIX = "event ";
+    private static final String ON_PREFIX = "on ";
+    private static final String FIND_PREFIX = "find ";
+    private static final String KNS_PREFIX = "kns ";
+    private static final String UPDATE_PREFIX = "update ";
+
+    // Delimiters
+    private static final String BY_DELIMITER = " /by ";
+    private static final String FROM_DELIMITER = " /from ";
+    private static final String TO_DELIMITER = " /to ";
 
     private final TaskList tasks;
     private final Storage storage;
@@ -132,10 +144,10 @@ public class Parser {
      * @throws InvalidDescriptionException If the task description or format is invalid.
      */
     private List<String> handleToDo(String request) throws InvalidDescriptionException {
-        if (request.length() <= TODO_CMD_LENGTH) {
+        if (!request.startsWith(TODO_PREFIX) || request.length() <= TODO_PREFIX.length()) {
             throw new InvalidDescriptionException("Tell me what description you want!");
         }
-        String content = request.substring(TODO_CMD_LENGTH).trim();
+        String content = request.substring(TODO_PREFIX.length()).trim();
         Task t = new ToDo(content);
         return addTask(t);
     }
@@ -148,11 +160,12 @@ public class Parser {
      * @throws InvalidDescriptionException If the task description or format is invalid.
      */
     private List<String> handleDeadline(String request) throws InvalidDescriptionException {
-        if (!request.contains(" /by ")) {
+        if (!request.contains(BY_DELIMITER)) {
             throw new InvalidDescriptionException("Specify your deadline using '/by'...");
         }
-        String content = request.substring(DEADLINE_CMD_LENGTH);
-        String[] deadlineInfo = content.split(" /by ");
+
+        String content = request.substring(DEADLINE_PREFIX.length());
+        String[] deadlineInfo = content.split(BY_DELIMITER);
         try {
             LocalDateTime by = DateTimeUtil.parseDateTime(deadlineInfo[1].trim());
             Task t = new Deadline(deadlineInfo[0].trim(), by);
@@ -170,12 +183,13 @@ public class Parser {
      * @throws InvalidDescriptionException If the task description or format is invalid.
      */
     private List<String> handleEvent(String request) throws InvalidDescriptionException {
-        if (!request.contains(" /from ") || !request.contains(" /to ")) {
+        if (!request.contains(FROM_DELIMITER) || !request.contains(TO_DELIMITER)) {
             throw new InvalidDescriptionException("Specify event duration using '/from' and '/to'...");
         }
-        String content = request.substring(EVENT_CMD_LENGTH);
-        String[] eventInfo = content.split(" /from ");
-        String[] fromToInfo = eventInfo[1].split(" /to ");
+
+        String content = request.substring(EVENT_PREFIX.length());
+        String[] eventInfo = content.split(FROM_DELIMITER);
+        String[] fromToInfo = eventInfo[1].split(TO_DELIMITER);
         try {
             LocalDateTime from = DateTimeUtil.parseDateTime(fromToInfo[0].trim());
             LocalDateTime to = DateTimeUtil.parseDateTime(fromToInfo[1].trim());
@@ -255,7 +269,9 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleOnDate(String request) {
-        LocalDate date = DateTimeUtil.parseDateTime(request.substring(ON_CMD_LENGTH)).toLocalDate();
+        LocalDate date = DateTimeUtil
+                .parseDateTime(request.substring(ON_PREFIX.length()))
+                .toLocalDate();
         assert date != null : "Parsed date should not be null";
         List<Task> filteredTasks = tasks.getTasksOnDate(date);
         return ui.getTasksOnDate(filteredTasks, date);
@@ -268,7 +284,7 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleFind(String request) {
-        String content = request.substring(FIND_CMD_LENGTH);
+        String content = request.substring(FIND_PREFIX.length());
         assert !content.isBlank() : "Find keyword should not be blank";
         return ui.getSearchTasks(tasks.find(content), content);
     }
@@ -280,7 +296,7 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleKns(String request) {
-        String content = request.substring(KNS_CMD_LENGTH).strip();
+        String content = request.substring(KNS_PREFIX.length()).strip();
         return ui.getKnsResponse(content);
     }
 
@@ -291,7 +307,7 @@ public class Parser {
      * @return          The message to be shown to user.
      */
     private List<String> handleUpdate(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
-        String content = request.substring(UPDATE_LENGTH).strip();
+        String content = request.substring(UPDATE_PREFIX.length()).strip();
         String index = content.substring(0, content.indexOf(" ")).strip();
         String remaining = content.substring(content.indexOf(" ")).strip();
         String field = remaining.substring(0, remaining.indexOf(" ")).strip();
