@@ -311,15 +311,41 @@ public class Parser {
      *
      * @param request   The full user input string containing the field to be updated and value to input.
      * @return          The message to be shown to user.
+     * @throws InvalidTaskNumberException       If the task number is invalid or missing.
+     * @throws InvalidDescriptionException      If the update arguments are invalid.
+     * @throws TaskIndexOutOfBoundsException    If the task index is out of bounds.
      */
-    private List<String> handleUpdate(String request) throws InvalidTaskNumberException, TaskIndexOutOfBoundsException {
+    private List<String> handleUpdate(String request)
+            throws InvalidTaskNumberException, InvalidDescriptionException, TaskIndexOutOfBoundsException {
         String content = request.substring(UPDATE_PREFIX.length()).strip();
-        String index = content.substring(0, content.indexOf(" ")).strip();
-        String remaining = content.substring(content.indexOf(" ")).strip();
-        String field = remaining.substring(0, remaining.indexOf(" ")).strip();
-        String value = remaining.substring(remaining.indexOf(" ")).strip();
-        Task t = this.tasks.updateTask(index, field, value);
 
+        if (content.isEmpty()) {
+            throw new InvalidDescriptionException("Tell me what to update!");
+        }
+
+        int firstSpaceIdx = content.indexOf(" ");
+        if (firstSpaceIdx == -1) {
+            throw new InvalidDescriptionException("Tell me what field to update!");
+        }
+        String index = content.substring(0, firstSpaceIdx).strip();
+
+        String remaining = content.substring(firstSpaceIdx).strip();
+        int secondSpaceIdx = remaining.indexOf(" ");
+        if (secondSpaceIdx == -1) {
+            throw new InvalidDescriptionException("Tell me the new value!");
+        }
+        String field = remaining.substring(0, secondSpaceIdx).strip();
+        String value = remaining.substring(secondSpaceIdx).strip();
+
+        if (field.isEmpty()) {
+            throw new InvalidDescriptionException("Tell me what field to update!");
+        }
+
+        if (value.isEmpty()) {
+            throw new InvalidDescriptionException("Tell me the new value!");
+        }
+
+        Task t = this.tasks.updateTask(index, field, value);
         storage.save(tasks);
 
         return ui.getTaskUpdated(t);

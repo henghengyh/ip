@@ -223,6 +223,8 @@ kns
 ```
 KNS...
 ```
+alongside some special _surprises_ that is not stated here deliberately
+for surprise purposes.
 
 ### Exiting Agnes
 
@@ -237,6 +239,7 @@ bye
 ```
 Goodbye! Have a wonderful day ahead!
 ```
+and close the application.
 
 ---
 ## Command Summary

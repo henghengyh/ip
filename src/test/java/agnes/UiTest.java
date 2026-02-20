@@ -60,7 +60,8 @@ public class UiTest {
 
         assertNotNull(messages);
         assertEquals(1, messages.size());
-        assertTrue(messages.get(0).contains("New task received"));
+        assertTrue(messages.get(0).contains("Okie Dokie"));
+        assertTrue(messages.get(0).contains("added this task"));
         assertTrue(messages.get(0).contains("ToDo Task Sample"));
         assertTrue(messages.get(0).contains("10 tasks"));
     }
@@ -72,6 +73,7 @@ public class UiTest {
 
         assertNotNull(messages);
         assertEquals(1, messages.size());
+        assertTrue(messages.get(0).contains("Siao EH"));
         assertTrue(messages.get(0).contains("removed this task"));
         assertTrue(messages.get(0).contains("5 tasks"));
     }
@@ -82,7 +84,7 @@ public class UiTest {
         List<String> messages = ui.getTasks(tasks);
 
         assertNotNull(messages);
-        assertTrue(messages.get(0).contains("No tasks"));
+        assertTrue(messages.get(0).contains("No tasks in your list"));
     }
 
     @Test
@@ -93,7 +95,7 @@ public class UiTest {
         List<String> messages = ui.getTasks(tasks);
 
         assertNotNull(messages);
-        assertTrue(messages.get(0).contains("Here are your tasks"));
+        assertTrue(messages.get(0).contains("Here's everything you've got so far"));
         assertTrue(messages.get(0).contains("1. "));
         assertTrue(messages.get(0).contains("2. "));
     }
@@ -104,6 +106,7 @@ public class UiTest {
         List<String> messages = ui.getTaskMarked(t, true);
 
         assertNotNull(messages);
+        assertTrue(messages.get(0).contains("Nice"));
         assertTrue(messages.get(0).contains("marked this task as done"));
     }
 
@@ -113,6 +116,7 @@ public class UiTest {
         List<String> messages = ui.getTaskMarked(t, false);
 
         assertNotNull(messages);
+        assertTrue(messages.get(0).contains("WTF"));
         assertTrue(messages.get(0).contains("marked this task as not done"));
     }
 
@@ -130,7 +134,8 @@ public class UiTest {
         List<String> messages = ui.getSearchTasks(tasks, "Buy");
 
         assertNotNull(messages);
-        assertTrue(messages.get(0).contains("Matching tasks"));
+        assertTrue(messages.get(0).contains("Here's what I found"));
+        assertTrue(messages.get(0).contains("Buy"));
         assertTrue(messages.get(0).contains("1. "));
     }
 
@@ -140,16 +145,41 @@ public class UiTest {
         List<String> messages = ui.getTasksOnDate(List.of(), date);
 
         assertNotNull(messages);
+        assertTrue(messages.get(0).contains("AIYOOOOOO"));
         assertTrue(messages.get(0).contains("No tasks found on"));
     }
 
     @Test
-    public void getKnsResponseTest() {
-        List<String> messages = ui.getKnsResponse("kns");
+    public void getTasksOnDateWithItemsTest() {
+        LocalDate date = LocalDate.of(2026, 2, 20);
+        List<Task> taskList = List.of(new ToDo("Task on this date"));
+        List<String> messages = ui.getTasksOnDate(taskList, date);
 
         assertNotNull(messages);
-        assertTrue(messages.size() >= 5);
+        assertTrue(messages.get(0).contains("Here's what I found on"));
+        assertTrue(messages.get(0).contains("1. "));
+    }
+
+    @Test
+    public void getTaskMarkedTest() {
+        Task t = new ToDo("Complete assignment");
+        List<String> messages = ui.getTaskMarked(t, true);
+
+        assertNotNull(messages);
+        assertTrue(messages.get(0).contains("Nice"));
+    }
+
+    @Test
+    public void getKnsResponseTest() {
+        List<String> messages = ui.getKnsResponse("");
+
+        assertNotNull(messages);
+        assertEquals(5, messages.size());
         assertTrue(messages.get(0).contains("LEE YI HENG"));
+        assertTrue(messages.get(0).contains("cise at me"));
+        assertTrue(messages.get(1).contains("CIRSE"));
+        assertTrue(messages.get(2).contains("CRUISE"));
+        assertTrue(messages.get(3).contains("CURSE"));
         assertTrue(messages.get(4).contains("KNS"));
     }
 
@@ -159,6 +189,10 @@ public class UiTest {
         List<String> messages = ui.getTaskUpdated(t);
 
         assertNotNull(messages);
-        assertTrue(messages.get(0).contains("Existing task updated"));
+        assertEquals(1, messages.size());
+        assertTrue(messages.get(0).contains("Haode"));
+        assertTrue(messages.get(0).contains("updated task"));
     }
 }
+
+
