@@ -125,7 +125,7 @@ public class Ui {
                 .mapToObj(i -> (i + 1) + ". " + tasks.get(i))
                 .collect(Collectors.toList());
         lines.add(0, "\n"
-                + "Here's what I found for \""+ keyword +"\":");
+                + "Here's what I found for \"" + keyword + "\":");
 
         return List.of(wrap(lines.toArray(new String[0])));
     }
