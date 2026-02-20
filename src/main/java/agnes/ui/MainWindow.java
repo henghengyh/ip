@@ -3,6 +3,7 @@ package agnes.ui;
 import java.util.List;
 
 import agnes.Agnes;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -11,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 /**
  * Controller for the main GUI.
  */
@@ -25,6 +28,7 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Agnes agnes;
+    private Stage stage;
 
     private Image userImage;
     private Image dukeImage;
@@ -52,14 +56,16 @@ public class MainWindow extends AnchorPane {
         );
     }
 
-    /** Injects the Agnes instance */
-    public void setAgnes(Agnes d) {
+    /** Injects the Agnes instance and Stage reference */
+    public void setAgnes(Agnes d, Stage stage) {
         agnes = d;
+        this.stage = stage;
     }
 
     /**
      * Creates two dialog boxes, one echoing user input and the other containing Agnes's reply and then appends them to
      * the dialog container. Clears the user input after processing.
+     * Closes the application after 2 seconds if the bye command is executed.
      */
     @FXML
     private void handleUserInput() {
@@ -74,5 +80,16 @@ public class MainWindow extends AnchorPane {
             );
         }
         userInput.clear();
+
+        // AI Recommended to include this delay and check to close the application after the bye command is executed
+        if (input.equals("bye")) {
+            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            delay.setOnFinished(event -> {
+                if (stage != null) {
+                    stage.close();
+                }
+            });
+            delay.play();
+        }
     }
 }

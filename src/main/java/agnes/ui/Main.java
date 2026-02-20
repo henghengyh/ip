@@ -26,7 +26,7 @@ public class Main extends Application {
             stage.setTitle("Agnes");
 
             setWindowDimensions(stage);
-            fxmlLoader.<MainWindow>getController().setAgnes(agnes); // inject the Agnes instance
+            fxmlLoader.<MainWindow>getController().setAgnes(agnes, stage);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
