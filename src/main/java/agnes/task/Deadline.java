@@ -43,7 +43,7 @@ public class Deadline extends Task {
     @Override
     public String toFileFormat() {
         return String.format(
-                "E | %s | %s",
+                "D | %s | %s",
                 super.toFileFormat(),
                 DateTimeUtil.formatDateTime(this.by)
         );

@@ -320,6 +320,8 @@ public class Parser {
         String value = remaining.substring(remaining.indexOf(" ")).strip();
         Task t = this.tasks.updateTask(index, field, value);
 
+        storage.save(tasks);
+
         return ui.getTaskUpdated(t);
     }
 

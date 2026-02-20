@@ -16,6 +16,8 @@ public class DateTimeUtil {
 
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter FORMATTED_DATE_TIME = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+    private static final DateTimeFormatter FORMATTED_DATE_ONLY = DateTimeFormatter.ofPattern("MMM dd yyyy");
 
     /**
      * Convert's the user's {@code String} input of DateTime into {@code LocalDateTime} object.
@@ -32,6 +34,26 @@ public class DateTimeUtil {
         } catch (DateTimeParseException e) {
             LocalDate date = LocalDate.parse(input, DATE_FORMAT);
             return date.atStartOfDay(); //we have to do this to fit the type check
+        }
+    }
+
+    /**
+     * Parses a formatted DateTime string (as stored in task.txt) into a {@code LocalDateTime} object.
+     * <p>
+     * Handles the formatted datetime strings that are stored by {@code formatDateTime()} method.
+     * Format: "MMM dd yyyy HH:mm" (e.g., "Feb 20 2026 22:55") or "MMM dd yyyy" (e.g., "Feb 20 2026")
+     * </p>
+     *
+     * @param input                         The formatted datetime string from storage.
+     * @return                              The parsed {@code LocalDateTime}.
+     * @throws DateTimeParseException       If the input format is incorrect.
+     */
+    public static LocalDateTime parseFormattedDateTime(String input) throws DateTimeParseException {
+        try {
+            return LocalDateTime.parse(input, FORMATTED_DATE_TIME);
+        } catch (DateTimeParseException e) {
+            LocalDate date = LocalDate.parse(input, FORMATTED_DATE_ONLY);
+            return date.atStartOfDay();
         }
     }
 

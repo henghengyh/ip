@@ -19,6 +19,7 @@ public class Agnes {
 
     /**
      * Creates a new Agnes application with initialized components.
+     * Loads previously saved tasks from storage.
      */
     public Agnes() {
         this.tasks = new TaskList();
@@ -26,6 +27,8 @@ public class Agnes {
         this.ui = new Ui();
 
         parser = new Parser(tasks, storage, ui);
+
+        storage.load(tasks);
     }
 
     public List<String> getResponse(String input) {
