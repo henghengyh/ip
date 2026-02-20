@@ -35,12 +35,12 @@ public class Parser {
     //
 
     // Command prefixes
-    private static final String TODO_PREFIX = "todo ";
-    private static final String DEADLINE_PREFIX = "deadline ";
-    private static final String EVENT_PREFIX = "event ";
-    private static final String ON_PREFIX = "on ";
-    private static final String FIND_PREFIX = "find ";
-    private static final String UPDATE_PREFIX = "update ";
+    private static final String TODO_PREFIX = "todo";
+    private static final String DEADLINE_PREFIX = "deadline";
+    private static final String EVENT_PREFIX = "event";
+    private static final String ON_PREFIX = "on";
+    private static final String FIND_PREFIX = "find";
+    private static final String UPDATE_PREFIX = "update";
 
     // Delimiters
     private static final String BY_DELIMITER = " /by ";
@@ -286,9 +286,15 @@ public class Parser {
      *
      * @param request   The full user input string containing the keyword.
      * @return          The message to be shown to user.
+     * @throws InvalidDescriptionException If the keyword is missing.
      */
-    private List<String> handleFind(String request) {
-        String content = request.substring(FIND_PREFIX.length());
+    private List<String> handleFind(String request) throws InvalidDescriptionException {
+        String content = request.substring(FIND_PREFIX.length()).strip();
+
+        if (content.isEmpty()) {
+            throw new InvalidDescriptionException("Tell me what to find!");
+        }
+
         assert !content.isBlank() : "Find keyword should not be blank";
         return ui.getSearchTasks(tasks.find(content), content);
     }
